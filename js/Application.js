@@ -50,7 +50,6 @@ Application.objCache = (function() {
         i++;
       }
       if (!exists) obj.children.push({name: name, type: type, access: access, children: []});
-      console.log(obj);
     },
     splitPath: function(path) {
       var pathElements = path.split(/[\/\.]+/);
@@ -656,8 +655,6 @@ Application.prototype.expandNodes = function(path) {
     // does the path point to a variable / link?
     type = Application.objCache.getType(path);
   });
-  
-  console.log(type);
   
   // is path a variable or link?
   if (type == 'variable') {

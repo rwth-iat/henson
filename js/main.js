@@ -86,6 +86,28 @@ $(document).ready(function() {
     });
   });
   
+  // listen to clicks on nav buttons
+  $('#button-refresh').click(function() {
+    event.preventDefault();
+    app.refreshNode($("#tree").dynatree("getActiveNode"));
+  });
+  $('#button-instantiate').click(function() {
+    event.preventDefault();
+    app.getInstantiate($("#tree").dynatree("getActiveNode").data.key);
+  });
+  $('#button-delete').click(function() {
+    event.preventDefault();
+    app.drawDelete($("#tree").dynatree("getActiveNode").data.key);
+  });
+  $('#button-rename').click(function() {
+    event.preventDefault();
+    app.drawRename($("#tree").dynatree("getActiveNode").data.key);
+  });
+  $('#button-link').click(function() {
+    event.preventDefault();
+    app.drawLink($("#tree").dynatree("getActiveNode").data.key);
+  });
+  
   // Set refresh timeout
   $('#refresh-timeout, #auto-refresh').change(function() {
     window.clearInterval(timer);
