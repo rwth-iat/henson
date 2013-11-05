@@ -1,0 +1,37 @@
+.tab-content {
+  overflow-y: auto;
+}
+
+#view-table tbody tr {
+  cursor: pointer;
+}
+
+#view-table thead>tr>th:first-child {
+  width: 20px;
+}
+
+#modal-references .modal-body table td:last-child {
+  width: 40px;
+}
+
+#main-alert {
+  position: absolute;
+  top: 20px;
+  left: 30%;
+  right: 30%;
+  text-align: center;
+}
+
+#button-instantiate {
+  margin-left: 40px;
+}
+
+/* Dynatree */
+ul.dynatree-container {
+  border: 1px solid #ddd;
+  overflow-y: auto;
+}
+
+span.dynatree-folder a {
+  font-weight: normal;
+}
