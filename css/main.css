@@ -26,6 +26,25 @@
   margin-left: 40px;
 }
 
+.input-wrap-xlarge {
+  position: relative;
+  width: 270px;
+}
+
+.zen-open {
+  position: absolute;
+  top: 5px;
+  right: -5px;
+}
+
+.zen-open i {
+  background-position: -16px -16px;
+}
+
+.zen-open i:hover {
+  background-position: -16px 0;
+}
+
 /* Dynatree */
 ul.dynatree-container {
   border: 1px solid #ddd;

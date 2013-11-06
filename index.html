@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/ui.dynatree.css">
+    <link rel="stylesheet" href="css/zen-form.css">
     <link rel="stylesheet" href="css/main.css">
     <script src="js/vendor/modernizr-2.6.2.min.js"></script>
   </head>
@@ -157,7 +158,10 @@
               <div class="control-group">
                 <label class="control-label" for="variable-value">Value:</label>
                 <div class="controls">
-                  <textarea rows="5" id="variable-value" class="input-xlarge"></textarea>
+                  <div class="input-wrap-xlarge">
+                    <a href="#" class="zen-open"><i class="zen-icon">Edit in Zen Mode</i></a>
+                    <textarea rows="5" id="variable-value" class="input-xlarge zen-mode" data-label="Type content here..."></textarea>
+                  </div>
                 </div>
               </div>
               <div class="control-group">

@@ -133,6 +133,7 @@ $(document).ready(function() {
   });
   
   $(window).resize();
-
+  
+	$('.zen-mode').zenForm({ trigger: '.zen-open', theme: 'light' });
 
 });
