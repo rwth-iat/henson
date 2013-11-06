@@ -29,7 +29,7 @@ Application.objCache = (function() {
       return this.findObj(this.splitPath(path)).type;
     },
     getAccess: function(path) {
-      return this.indObj(this.splitPath(path)).access;
+      return this.findObj(this.splitPath(path)).access;
     },
     getChildren: function(path) {
       return this.findObj(this.splitPath(path)).children;
@@ -207,7 +207,7 @@ Application.prototype.getData = function(path) {
 
 /**
  * Draws view table from AJAX data.
- * If plugin ist set for this class, also launches the plugin. (TODO)
+ * If plugin ist set for this class, also launches the plugin.
  *
  * @param data XML data from AJAX request to server
  */
@@ -408,10 +408,12 @@ Application.prototype.getInstantiate = function(objectPath) {
  * Opens instantiate modal.
  *
  * @param data XML data from AJAX request to server
- * @param objectPath Pathe to create object
+ * @param objectPath Path to create object
  */
 Application.prototype.drawInstantiate = function(data, objectPath) {
-  $('#modal-instantiate #instantiate-object-path').val(objectPath.split('.')[0] + '/NewInstance'); // TODO
+  var access = Application.objCache.getAccess(objectPath)
+  var seperator = (access.indexOf('part') == -1 ? '/' : '.');
+  $('#modal-instantiate #instantiate-object-path').val(objectPath + (objectPath != '/' ? seperator : '') + 'NewInstance');
   
   var list = data.getElementsByTagName('string');
   var appendArray = [];
