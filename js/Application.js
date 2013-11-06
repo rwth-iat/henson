@@ -575,17 +575,28 @@ Application.prototype.drawReferences = function(data) {
     $('#modal-references').modal('hide');
     Application.prototype.expandNodes($(this).html());
   });
-  // regsster event handler for unlink button
+  // register event handler for unlink button
   $('#modal-references .modal-body table button').unbind('click').click(function() {
     if (confirm('Do you really want to unlink?')) {
-      $('#modal-references').modal('hide');
       $('#view-table').trigger(
         'unlink',
         {
           path: $('#modal-references .modal-body table').attr('data-path'),
           element: $(this).parent().prev().children('a').html()
         }
-      );
+      ); 
+    }
+  });
+  
+  // refresh on unlink success or close on unlink fail
+  $(document).ajaxComplete(function(e, xhr, settings) {
+    if (settings.url.indexOf('unlink') != -1) {
+      xhr.fail(function() {
+        $('#modal-references').modal('hide');
+      });
+      xhr.success(function() {
+        $('#view-table').trigger('getReferences', data.getElementsByTagName('path')[0].textContent);
+      });
     }
   });
 },

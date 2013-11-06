@@ -52,6 +52,9 @@ $(document).ready(function() {
     $('#view-table').on('getVariable', function(e, path) {
       app.getVariable(path);
     });
+    $('#view-table').on('getReferences', function(e, path) {
+      app.getReferences(path);
+    });
     $('#view-table').on('setVariable', function(e, data) {
       app.setVariable(data.path, data.newValue, data.newVartype);
     });
