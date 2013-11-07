@@ -1524,7 +1524,7 @@ DynaTreeNode.prototype = {
 			this.tree.$tree.bind(eventType, function(e, node, isOk){
 				self.tree.$tree.unbind(eventType);
 				self.tree.logDebug("loaded %o, %o, %o", e, node, isOk);
-				if(node !== self){
+        if(node !== self){
 					throw "got invalid load event";
 				}
 				callback.call(self.tree, node, isOk);

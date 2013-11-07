@@ -100,7 +100,7 @@ Application.prototype.getServer = function() {
  * @param data XML data from AJAX request to server
  */
 Application.prototype.drawServer = function(data) {
-  $('#server-name').empty().prop('disabled', false).focus();
+  $('#server-name').empty().prop('disabled', false);
   var servers = data.getElementsByTagName('identifier');
   for (var i = 0; i < servers.length; i++) {
     $('#server-name').append('<option>'+servers[i].textContent+'</option>');
