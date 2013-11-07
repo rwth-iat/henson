@@ -32,12 +32,10 @@
       
       <div class="row-fluid">
         <form id="nav-form" class="form-inline row-fluid span12">
-          <input type="text" id="server" class="input-small" value="localhost" placeholder="Server">
-          <label for="port">:</label>
-          <input type="text" id="port" class="input-mini" value="7509" placeholder="Port">
+          <input type="text" id="server-address" class="input-small" value="localhost" placeholder="Server">
           <label for="path"></label>
           <input type="text" id="path" class="input-large" value="/" placeholder="Path">
-          <button id="button-submit" type="submit" class="btn"><i class="fa fa-play"></i> Load</button>
+          <button id="button-submit" type="submit" class="btn" href="#modal-server" data-toggle="modal"><i class="fa fa-play"></i> Load</button>
           <button id="button-refresh" class="btn" title="Refresh"><i class="fa fa-refresh"></i></button>
           <button id="button-instantiate" class="btn" title="Instantiate" href="#modal-instantiate" data-toggle="modal"><i class="fa fa-folder"></i></button>
           <button id="button-delete" class="btn" title="Delete" href="#modal-delete" data-toggle="modal"><i class="fa fa-trash-o"></i></button>
@@ -121,6 +119,30 @@
         <li><a tabindex="-1" href="#modal-instantiate" data-toggle="modal"><i class="fa fa-folder"></i> Instantiate</a></li>
         <li><a tabindex="-1" href="#modal-link" data-toggle="modal"><i class="fa fa-link"></i> Link</a></li>
       </ul>
+    </div>
+    
+    <div id="modal-server" class="modal hide" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title"><i class="fa fa-globe"></i> Select server</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal">
+              <div class="control-group">
+                <label class="control-label" for="server-name">Available servers:</label>
+                <div class="controls">
+                  <select id="server-name" class="input-xlarge"></select>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button id="server-select" type="button" class="btn btn-primary" data-dismiss="modal">Select</button>
+          </div>
+        </div>
+      </div>
     </div>
     
     <div id="modal-references" class="modal hide" role="dialog">

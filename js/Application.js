@@ -88,12 +88,60 @@ Application.prototype.setActivePath = function(activePath) {
 },
 
 /**
+ * Gets list of all servers and draws selection modal on success.
+ */
+Application.prototype.getServer = function() {
+  this.serverConnection.getEP('/servers', this.drawServer, this.drawResult);
+},
+
+/**
+ * Draws server selection modal from AJAX data
+ *
+ * @param data XML data from AJAX request to server
+ */
+Application.prototype.drawServer = function(data) {
+  $('#modal-server #server-name').empty();
+  var servers = data.getElementsByTagName('identifier');
+  for (var i = 0; i < servers.length; i++) {
+    $('#modal-server #server-name').append('<option>'+servers[i].textContent+'</option>');
+  }
+  
+  // register event handler for select button
+  $('#server-select').unbind('click').click(function() {
+    $('#view-table').trigger('setServer', $('#modal-server #server-name').val());
+  });
+},
+
+/**
+ * Gets port for server name
+ *
+ * @param serverName Name of the server
+ */
+Application.prototype.getPort = function(serverName) {
+  this.serverConnection.getServer(serverName, this.setPort, this.drawResult);
+},
+
+/**
+ * Sets port in server connection
+ *
+ * @param data XML data from AJAX request
+ */
+Application.prototype.setPort = function(data) {
+  $('#view-table').trigger('setPort', 
+    {
+      port: data.getElementsByTagName('port')[0].textContent,
+      serverName: data.getElementsByTagName('path')[0].textContent
+    }
+  );
+},
+
+/**
  * Gets data for root node by AJAX request and draws children on success.
  *
  * @param rootNode Dynatree root node
  */
-Application.prototype.getRoot = function(rootNode) {
-  this.serverConnection.getEP('/', this.drawRoot, this.drawResult, rootNode);
+Application.prototype.getRoot = function(rootNode, serverName) {
+  this.serverConnection.getEP('/', this.drawRoot, this.drawResult, rootNode, serverName);
 },
 
 /**
@@ -102,11 +150,11 @@ Application.prototype.getRoot = function(rootNode) {
  * @param data XML data from AJAX request to server
  * @param rootNode Dynatree root node
  */
-Application.prototype.drawRoot = function(data, rootNode) {
+Application.prototype.drawRoot = function(data, rootNode, serverName) {
   rootNode.data.key = 'server';
   rootNode.removeChildren();
   
-  rootNode.addChild({title: 'MANAGER', isLazy: true, key: '/', isFolder: true, type: 'domain', addClass: 'context-menu-domain'});
+  rootNode.addChild({title: serverName, isLazy: true, key: '/', isFolder: true, type: 'domain', addClass: 'context-menu-domain'});
 
   Application.prototype.expandNodes($('input#path').val());
   Application.prototype.addContextMenu();

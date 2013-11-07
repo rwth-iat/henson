@@ -37,11 +37,13 @@ $(document).ready(function() {
     // don't reload page on submit
     event.preventDefault();
     
-    conn = new ServerConnection($('input#server').val(), $('input#port').val());
-    app = new Application(conn, $('input#path').val());
+    conn = new ServerConnection($('#server-address').val());
+    app = new Application(conn, $('#path').val());
+    
+    app.getServer();
     
     // draw root node
-    app.getRoot($('#tree').dynatree('getRoot'));
+    //app.getRoot($('#tree').dynatree('getRoot'));
 
     // save clicked path to global variable
     $('#view-table').on('saveClickedPath', function(e, path) {
@@ -49,6 +51,13 @@ $(document).ready(function() {
     });
     
     // listen to custom event triggers and call corresponding function
+    $('#view-table').on('setServer', function(e, serverName) {
+      app.getPort(serverName);
+    });
+    $('#view-table').on('setPort', function(e, data) {
+      conn.setPort(data.port);
+      app.getRoot($('#tree').dynatree('getRoot'), data.serverName);
+    });
     $('#view-table').on('getVariable', function(e, path) {
       app.getVariable(path);
     });

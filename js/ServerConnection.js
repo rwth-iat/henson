@@ -7,11 +7,24 @@
  * @param address Network address of server
  * @param port Server port
  */
-var ServerConnection = function(address, port) {
-  this.address = address;
-  this.port = port;
+var ServerConnection = function(address) {
+  var serverArray = address.split(':');
+  this.address = serverArray[0];
+  this.port = parseInt(serverArray[1], 10);
+  if (isNaN(this.port)) {
+    this.port = 7509;
+  }
   this.cache = true;
 }
+
+/**
+ * Change server port
+ *
+ * @param port New server port
+ */
+ServerConnection.prototype.setPort = function(port) {
+  this.port = port;
+},
 
 /**
  * Generate URL path.
@@ -21,7 +34,24 @@ var ServerConnection = function(address, port) {
  * @return URL path
  */
 ServerConnection.prototype.getURL = function(path, funcName) {
-  return 'http://'+this.address+':'+this.port+'/'+funcName+'?path='+path+(funcName == 'getEP' ? '&requestType=OT_ANY': '')+'&format=ksx';
+  return 'http://'+this.address+':'+this.port+'/'+funcName+'?'+(funcName == 'getServer' ? 'servername' : 'path')+'='+path+(funcName == 'getEP' ? '&requestType=OT_ANY': '')+'&format=ksx';
+},
+
+/**
+ * 
+ */
+ServerConnection.prototype.getServer = function(serverName, successCallback, failCallback) {
+  $.ajax({
+    url: this.getURL(serverName, 'getServer'),
+    dataType: 'xml',
+    cache: this.cache,
+    success: function(data, textStatus) {
+      successCallback(ServerConnection.prototype.appendPath(data, serverName));
+    },
+    error: function(obj, textStatus, errorThrown) {
+      failCallback(serverName, textStatus, 'Get Server', obj.status, obj.statusText);
+    }
+  });
 },
 
 /**
@@ -32,14 +62,15 @@ ServerConnection.prototype.getURL = function(path, funcName) {
  * @param successCallback Callback on success
  * @param failCallback Callback on failure
  * @param node Dynatree node to attach data to
+ * @param addParam Additional parameter if needed
  */
-ServerConnection.prototype.getEP = function(path, successCallback, failCallback, node) {
+ServerConnection.prototype.getEP = function(path, successCallback, failCallback, node, addParam) {
   $.ajax({
     url: this.getURL(path, 'getEP'),
     dataType: 'xml',
     cache: this.cache,
     success: function(data, textStatus) {
-      successCallback(ServerConnection.prototype.appendPath(data, path), node);
+      successCallback(ServerConnection.prototype.appendPath(data, path), node, addParam);
     },
     error: function(obj, textStatus, errorThrown) {
       failCallback(path, textStatus, 'Get EP', obj.status, obj.statusText);
