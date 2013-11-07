@@ -327,7 +327,6 @@ Application.prototype.appendRows = function(list, path, type) {
     if (e.which == 1) {
       if (rowtype == 'variable') {
         // open variable modal
-        // workaround for stupid JS OOP structure: throw event, catch in main.js
         $('#view-table').trigger('getVariable', rowpath);
       } else {
         Application.prototype.expandNodes(rowpath);
@@ -558,6 +557,7 @@ Application.prototype.getReferences = function(path) {
  */
 Application.prototype.drawReferences = function(data) {
   var refs = data.getElementsByTagName('string');
+  $('#modal-references #new-link').val('');
   $('#modal-references .modal-body > table').empty();
   $('#modal-references .modal-body > table').attr('data-path', data.getElementsByTagName('path')[0].textContent);
   // add links
@@ -575,6 +575,7 @@ Application.prototype.drawReferences = function(data) {
     $('#modal-references').modal('hide');
     Application.prototype.expandNodes($(this).html());
   });
+  
   // register event handler for unlink button
   $('#modal-references .modal-body table button').unbind('click').click(function() {
     if (confirm('Do you really want to unlink?')) {
@@ -588,9 +589,20 @@ Application.prototype.drawReferences = function(data) {
     }
   });
   
-  // refresh on unlink success or close on unlink fail
+  // register event handler for link button
+  $('#modal-references #button-new-link').unbind('click').click(function() {
+    $('#view-table').trigger(
+      'link',
+      {
+        path: $('#modal-references .modal-body table').attr('data-path'),
+        element: $('#modal-references #new-link').val()
+      }
+    ); 
+  });
+  
+  // refresh on link / unlink success or close on link / unlink fail
   $(document).ajaxComplete(function(e, xhr, settings) {
-    if (settings.url.indexOf('unlink') != -1) {
+    if (settings.url.indexOf('link') != -1) {
       xhr.fail(function() {
         $('#modal-references').modal('hide');
       });
