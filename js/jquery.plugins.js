@@ -477,7 +477,7 @@
                     return App.env.addObject('textarea', {
                         id: ID,
                         text: value,
-                        rows: 5,
+                        rows: 20,
                         class: 'input'
                     });
 
