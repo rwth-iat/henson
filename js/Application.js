@@ -670,9 +670,6 @@ Application.prototype.drawReferences = function(data) {
   // refresh on link / unlink success or close on link / unlink fail
   $(document).ajaxComplete(function(e, xhr, settings) {
     if (settings.url.indexOf('link') != -1) {
-      xhr.fail(function() {
-        $('#modal-references').modal('hide');
-      });
       xhr.success(function() {
         $('#view-table').trigger('getReferences', data.getElementsByTagName('path')[0].textContent);
       });
