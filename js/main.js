@@ -32,53 +32,56 @@ var initializeTree = function() {
 }
 
 var registerCustomEventListeners = function() {
-  $('#view-table').on('setServer', function(e, serverName) {
+  $('#view-table').off('setServer').on('setServer', function(e, serverName) {
       app.getPort(serverName);
   });
-  $('#view-table').on('setPort', function(e, data) {
+  $('#view-table').off('setPort').on('setPort', function(e, data) {
     conn.setPort(data.port);
     app.getRoot($('#tree').dynatree('getRoot'), data.serverName);
   });
-  $('#view-table').on('getVariable', function(e, path) {
+  $('#view-table').off('getVariable').on('getVariable', function(e, path) {
     app.getVariable(path);
   });
-  $('#view-table').on('getReferences', function(e, path) {
+  $('#view-table').off('getReferences').on('getReferences', function(e, path) {
     app.getReferences(path);
   });
-  $('#view-table').on('setVariable', function(e, data) {
+  $('#view-table').off('setVariable').on('setVariable', function(e, data) {
     app.setVariable(data.path, data.newValue, data.newVartype);
   });
-  $('#view-table').on('createObject', function(e, data) {
+  $('#view-table').off('createObject').on('createObject', function(e, data) {
     app.createObject(data.path, data.factory);
   });
-  $('#view-table').on('deleteObject', function(e, path) {
+  $('#view-table').off('deleteObject').on('deleteObject', function(e, path) {
     app.deleteObject(path);
   });
-  $('#view-table').on('renameObject', function(e, data) {
+  $('#view-table').off('renameObject').on('renameObject', function(e, data) {
     app.renameObject(data.path, data.newName);
   });
-  $('#view-table').on('link', function(e, data) {
+  $('#view-table').off('link').on('link', function(e, data) {
     app.link(data.path, data.element);
   });
-  $('#view-table').on('unlink', function(e, data) {
+  $('#view-table').off('unlink').on('unlink', function(e, data) {
     app.unlink(data.path, data.element);
   });
-  $('#view-table').on('refresh', function(e, path) {
-    app.refreshNode($("#tree").dynatree("getTree").getNodeByKey(path));
+  $('#view-table').off('refresh').on('refresh', function(e, path) {
+    if (e.handled !== true) {
+      app.refreshNode($('#tree').dynatree('getTree').getNodeByKey(path));
+      e.handled = true;
+    }
   });
 }
 
 var registerContextMenuEventListeners = function() {
-  $('.dropdown-menu li a[href="#modal-instantiate"]').click(function() {
+  $('.dropdown-menu li a[href="#modal-instantiate"]').off('click').click(function() {
     app.getInstantiate(clickedPath);
   });
-  $('.dropdown-menu li a[href="#modal-delete"]').click(function() {
+  $('.dropdown-menu li a[href="#modal-delete"]').off('click').click(function() {
     app.drawDelete(clickedPath);
   });
-  $('.dropdown-menu li a[href="#modal-rename"]').click(function() {
+  $('.dropdown-menu li a[href="#modal-rename"]').off('click').click(function() {
     app.drawRename(clickedPath);
   });
-  $('.dropdown-menu li a[href="#modal-link"]').click(function() {
+  $('.dropdown-menu li a[href="#modal-link"]').off('click').click(function() {
     app.drawLink(clickedPath);
   });
 }
@@ -86,7 +89,7 @@ var registerContextMenuEventListeners = function() {
 $(document).ready(function() {
   
   // listen to clicks on nav buttons
-  $('#button-submit').unbind('click').click(function(event) {
+  $('#button-submit').off('click').click(function(event) {
 
     // don't reload page on submit
     event.preventDefault();
@@ -101,35 +104,35 @@ $(document).ready(function() {
     app.getServer();
     
     // save clicked path to global variable
-    $('#view-table').on('saveClickedPath', function(e, path) {
+    $('#view-table').off('saveClickedPath').on('saveClickedPath', function(e, path) {
       clickedPath = path;
     });
     
     $(window).resize();
   });
-  $('#button-refresh').unbind('click').click(function(event) {
+  $('#button-refresh').off('click').click(function(event) {
     event.preventDefault();
     app.refreshNode($("#tree").dynatree("getActiveNode"));
   });
-  $('#button-instantiate').unbind('click').click(function(event) {
+  $('#button-instantiate').off('click').click(function(event) {
     event.preventDefault();
     app.getInstantiate($("#tree").dynatree("getActiveNode").data.key);
   });
-  $('#button-delete').unbind('click').click(function(event) {
+  $('#button-delete').off('click').click(function(event) {
     event.preventDefault();
     app.drawDelete($("#tree").dynatree("getActiveNode").data.key);
   });
-  $('#button-rename').unbind('click').click(function(event) {
+  $('#button-rename').off('click').click(function(event) {
     event.preventDefault();
     app.drawRename($("#tree").dynatree("getActiveNode").data.key);
   });
-  $('#button-link').unbind('click').click(function(event) {
+  $('#button-link').off('click').click(function(event) {
     event.preventDefault();
     app.drawLink($("#tree").dynatree("getActiveNode").data.key);
   });
   
   // Set refresh timeout
-  $('#refresh-timeout, #auto-refresh').change(function() {
+  $('#refresh-timeout, #auto-refresh').off('change').change(function() {
     window.clearInterval(timer);
     if ($('#auto-refresh').is(':checked')) {
       

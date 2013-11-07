@@ -370,7 +370,7 @@ Application.prototype.appendRows = function(list, path, type) {
   }
   
   // register event listeners when clicking on row
-  $('#domain-view>table>tbody>tr').unbind('mousedown').mousedown(function(e) {
+  $('#domain-view>table>tbody>tr').off('mousedown').mousedown(function(e) {
     var rowtype = $(this).attr('data-type');
     var rowpath = $(this).attr('data-path');
     // left click
@@ -420,7 +420,7 @@ Application.prototype.drawVariable = function(data) {
   $('#modal-variable').modal('show');
   
   // Register event handler for save button
-  $('#modal-variable #save-variable').unbind('click').click(function() {
+  $('#modal-variable #save-variable').off('click').click(function() {
     // Trigger event to set variable with new value and type.
     $('#view-table').trigger(
       'setVariable', 
@@ -474,7 +474,7 @@ Application.prototype.drawInstantiate = function(data, objectPath) {
   $('#modal-instantiate #instantiate-class-path').append(appendArray);
   
   // register event handler for save button
-  $('#modal-instantiate #save-instantiate').unbind('click').click(function() {
+  $('#modal-instantiate #save-instantiate').off('click').click(function() {
     $('#view-table').trigger(
       'createObject',
       {
@@ -485,8 +485,11 @@ Application.prototype.drawInstantiate = function(data, objectPath) {
   });
   
   // refresh on instantiate success
-  $(document).ajaxComplete(function(e, xhr, settings) {
+  $(document).off('ajaxComplete').ajaxComplete(function(e, xhr, settings) {
+
     if (settings.url.indexOf('createObject') != -1) {
+          console.log('complete');
+    console.log(settings.url);
       xhr.success(function() {
         $('#view-table').trigger('refresh', objectPath);
       });
@@ -512,12 +515,12 @@ Application.prototype.createObject = function(path, factory) {
 Application.prototype.drawDelete = function(path) {
   $('#modal-delete .modal-body strong').html(path);
   
-  $('#modal-delete #save-delete').unbind('click').click(function() {
+  $('#modal-delete #save-delete').off('click').click(function() {
     $('#view-table').trigger('deleteObject', path);
   });
   
   // refresh on delete success
-  $(document).ajaxComplete(function(e, xhr, settings) {
+  $(document).off('ajaxComplete').ajaxComplete(function(e, xhr, settings) {
     if (settings.url.indexOf('delete') != -1) {
       xhr.success(function() {
         var pathArray = path.split(/[\/\.](?=[^\/.]*$)/);
@@ -544,7 +547,7 @@ Application.prototype.deleteObject = function(path) {
 Application.prototype.drawRename = function(path) {
   $('#modal-rename #rename-object-name').val(path);
   
-  $('#modal-rename #save-rename').unbind('click').click(function() {
+  $('#modal-rename #save-rename').off('click').click(function() {
     $('#view-table').trigger(
     'renameObject', 
     {
@@ -580,7 +583,7 @@ Application.prototype.drawLink = function(path) {
     $('#modal-link #link-path').val(path);
   }
   
-  $('#modal-link #save-link').unbind('click').click(function() {
+  $('#modal-link #save-link').off('click').click(function() {
     $('#view-table').trigger(
     'link', 
     {
@@ -640,13 +643,13 @@ Application.prototype.drawReferences = function(data) {
   $('#modal-references').modal('show');
   
   // register event handler for click on link
-  $('#modal-references .modal-body table a').unbind('click').click(function() {
+  $('#modal-references .modal-body table a').off('click').click(function() {
     $('#modal-references').modal('hide');
     Application.prototype.expandNodes($(this).html());
   });
   
   // register event handler for unlink button
-  $('#modal-references .modal-body table button').unbind('click').click(function() {
+  $('#modal-references .modal-body table button').off('click').click(function() {
     if (confirm('Do you really want to unlink?')) {
       $('#view-table').trigger(
         'unlink',
@@ -659,7 +662,7 @@ Application.prototype.drawReferences = function(data) {
   });
   
   // register event handler for link button
-  $('#modal-references #button-new-link').unbind('click').click(function() {
+  $('#modal-references #button-new-link').off('click').click(function() {
     $('#view-table').trigger(
       'link',
       {
@@ -801,6 +804,7 @@ Application.prototype.refreshNode = function(node) {
     this.getData(node.data.key);
   } else {
     node.getParent().reloadChildren();
+    node.getParent().activate();
   }
 },
 
