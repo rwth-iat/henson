@@ -22,8 +22,8 @@ var plugins = [
     name: 'cshmi-view',
     title: 'CSHMI',
     author: 'Christoph Sachsenhausen',
-    //activate: {class: '/acplt/cshmi/group'},
-    activate: {class: '/acplt/ov/object'},
+    activate: {class: 'cshmi/Group'},
+    //activate: {class: '/acplt/ov/object'},
     foreground: true,
     refresh: false,
     run: function(activeElementPath, data) {

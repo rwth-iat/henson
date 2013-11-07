@@ -100,15 +100,15 @@ Application.prototype.getServer = function() {
  * @param data XML data from AJAX request to server
  */
 Application.prototype.drawServer = function(data) {
-  $('#modal-server #server-name').empty();
+  $('#server-name').empty().append('<option disabled>Choose server:</option>').prop('disabled', false).focus();
   var servers = data.getElementsByTagName('identifier');
   for (var i = 0; i < servers.length; i++) {
-    $('#modal-server #server-name').append('<option>'+servers[i].textContent+'</option>');
+    $('#server-name').append('<option>'+servers[i].textContent+'</option>');
   }
   
-  // register event handler for select button
-  $('#server-select').unbind('click').click(function() {
-    $('#view-table').trigger('setServer', $('#modal-server #server-name').val());
+  // register event handler for changing server name
+  $('#server-name').change(function() {
+    $('#view-table').trigger('setServer', $('#server-name').val());
   });
 },
 
@@ -265,7 +265,7 @@ Application.prototype.drawData = function(data) {
   var currentClass = data.getElementsByTagName('path')[0].textContent;
   for (var i=0; i<plugins.length; i++) {
     // is the selected domain equal to activation requirement?
-    if (plugins[i].activate.class == currentClass || plugins[i].activate.always) {
+    if (currentClass.indexOf(plugins[i].activate.class) != -1 || plugins[i].activate.always) {
       // load the plugin only if it does not exist yet OR it exists in DOM and is allowed to refresh?
       var pluginExists = ($('#'+plugins[i].name).length > 0 ? true : false);
       if (!pluginExists || (pluginExists && plugins[i].refresh)) {
