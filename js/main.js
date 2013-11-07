@@ -102,23 +102,24 @@ $(document).ready(function() {
   });
   
   // listen to clicks on nav buttons
-  $('#button-refresh').click(function() {
+  $('#button-refresh').click(function(event) {
     event.preventDefault();
     app.refreshNode($("#tree").dynatree("getActiveNode"));
+    return false;
   });
-  $('#button-instantiate').click(function() {
+  $('#button-instantiate').click(function(event) {
     event.preventDefault();
     app.getInstantiate($("#tree").dynatree("getActiveNode").data.key);
   });
-  $('#button-delete').click(function() {
+  $('#button-delete').click(function(event) {
     event.preventDefault();
     app.drawDelete($("#tree").dynatree("getActiveNode").data.key);
   });
-  $('#button-rename').click(function() {
+  $('#button-rename').click(function(event) {
     event.preventDefault();
     app.drawRename($("#tree").dynatree("getActiveNode").data.key);
   });
-  $('#button-link').click(function() {
+  $('#button-link').click(function(event) {
     event.preventDefault();
     app.drawLink($("#tree").dynatree("getActiveNode").data.key);
   });
