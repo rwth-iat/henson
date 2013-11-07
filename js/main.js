@@ -152,5 +152,8 @@ $(document).ready(function() {
   
 	// add zen mode to inputs
   $('.zen-mode').zenForm({ trigger: '.zen-open', theme: 'light' });
+  
+  // fire it up
+  $('#button-submit').trigger('click');
 
 });
