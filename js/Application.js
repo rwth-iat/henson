@@ -107,7 +107,7 @@ Application.prototype.drawServer = function(data) {
   }
   
   // register event handler for changing server name
-  $('#server-name').change(function() {
+  $('#server-name').off('change').change(function() {
     $('#view-table').trigger('setServer', $('#server-name').val());
   });
   
@@ -486,10 +486,7 @@ Application.prototype.drawInstantiate = function(data, objectPath) {
   
   // refresh on instantiate success
   $(document).off('ajaxComplete').ajaxComplete(function(e, xhr, settings) {
-
     if (settings.url.indexOf('createObject') != -1) {
-          console.log('complete');
-    console.log(settings.url);
       xhr.success(function() {
         $('#view-table').trigger('refresh', objectPath);
       });
@@ -523,7 +520,7 @@ Application.prototype.drawDelete = function(path) {
   $(document).off('ajaxComplete').ajaxComplete(function(e, xhr, settings) {
     if (settings.url.indexOf('delete') != -1) {
       xhr.success(function() {
-        var pathArray = path.split(/[\/\.](?=[^\/.]*$)/);
+        var pathArray = path.split(/[\/\.](?=[^\/.]*$)/); // find last '/' or '.' of the path
         $('#view-table').trigger('refresh', pathArray[0]);
       });
     }

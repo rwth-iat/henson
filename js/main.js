@@ -33,7 +33,7 @@ var initializeTree = function() {
 
 var registerCustomEventListeners = function() {
   $('#view-table').off('setServer').on('setServer', function(e, serverName) {
-      app.getPort(serverName);
+    app.getPort(serverName);
   });
   $('#view-table').off('setPort').on('setPort', function(e, data) {
     conn.setPort(data.port);
@@ -64,10 +64,7 @@ var registerCustomEventListeners = function() {
     app.unlink(data.path, data.element);
   });
   $('#view-table').off('refresh').on('refresh', function(e, path) {
-    if (e.handled !== true) {
-      app.refreshNode($('#tree').dynatree('getTree').getNodeByKey(path));
-      e.handled = true;
-    }
+    app.refreshNode($('#tree').dynatree('getTree').getNodeByKey(path));
   });
 }
 
