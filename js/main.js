@@ -73,6 +73,9 @@ $(document).ready(function() {
     $('#view-table').on('unlink', function(e, data) {
       app.unlink(data.path, data.element);
     });
+    $('#view-table').on('refresh', function(e, path) {
+      app.refreshNode($("#tree").dynatree("getTree").getNodeByKey(path));
+    });
     
     // listen to clicks on context menu
     $('.dropdown-menu li a[href="#modal-instantiate"]').click(function() {
@@ -137,6 +140,7 @@ $(document).ready(function() {
   
   $(window).resize();
   
-	$('.zen-mode').zenForm({ trigger: '.zen-open', theme: 'light' });
+	// add zen mode to inputs
+  $('.zen-mode').zenForm({ trigger: '.zen-open', theme: 'light' });
 
 });

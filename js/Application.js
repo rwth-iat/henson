@@ -433,6 +433,15 @@ Application.prototype.drawInstantiate = function(data, objectPath) {
       }
     );
   });
+  
+  // refresh on instantiate success
+  $(document).ajaxComplete(function(e, xhr, settings) {
+    if (settings.url.indexOf('createObject') != -1) {
+      xhr.success(function() {
+        $('#view-table').trigger('refresh', objectPath);
+      });
+    }
+  });
 },
 
 /**
@@ -455,6 +464,16 @@ Application.prototype.drawDelete = function(path) {
   
   $('#modal-delete #save-delete').unbind('click').click(function() {
     $('#view-table').trigger('deleteObject', path);
+  });
+  
+  // refresh on delete success
+  $(document).ajaxComplete(function(e, xhr, settings) {
+    if (settings.url.indexOf('delete') != -1) {
+      xhr.success(function() {
+        var pathArray = path.split(/[\/\.](?=[^\/.]*$)/);
+        $('#view-table').trigger('refresh', pathArray[0]);
+      });
+    }
   });
 },
 
