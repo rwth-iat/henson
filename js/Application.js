@@ -289,6 +289,21 @@ Application.prototype.getBaseClass = function(data, node, self) {
  * @param dataDomain XML data from AJAX request to server
  */
 Application.prototype.drawData = function(dataBaseClass, dataDomain) {
+  
+  var removeTab = function(name) {
+    $('#values .nav-tabs a[href="#'+name+'"]').parent().remove();
+    $('#values .tab-content #'.name).remove();
+  };
+  var addTab = function(name, title) {
+    $('#values .nav-tabs').append('<li><a href="#'+name+'" data-toggle="tab">'+title+'&nbsp;&nbsp;&nbsp;</a><button type="button" class="close" title="close plugin">&times;</button></li>');
+    $('#values .tab-content').append('<div class="tab-pane" id="'+name+'"></div>');
+  };
+  var setActive = function(name) {
+    $('#values .nav-tabs li').removeClass('active');
+    $('#values .tab-pane').removeClass('active');
+    $('#values .nav-tabs a[href="#'+name+'"]').parent().addClass('active');
+    $('#values #'+name).addClass('active');
+  };
 
   // check plugins
   var currentClass = dataDomain.getElementsByTagName('path')[0].textContent,
@@ -301,27 +316,21 @@ Application.prototype.drawData = function(dataBaseClass, dataDomain) {
   
     // is the selected domain equal to activation requirement?
     if (currentClass.indexOf(plugins[i].activate.exactClass) != -1 || baseClass.indexOf(plugins[i].activate.baseClass) != -1 || plugins[i].activate.always) {
+      
       // load the plugin only if it does not exist yet OR it exists in DOM and is allowed to refresh?
       var pluginExists = ($('#'+plugins[i].name).length > 0 ? true : false);
       
       if (!pluginExists || (pluginExists && plugins[i].refresh)) {
         if (plugins[i].name != 'domain-view') {
           // remove old tab
-          $('#values .nav-tabs a[href="#'+plugins[i].name+'"]').parent().remove();
-          $('#values .tab-content #'+plugins[i].name).remove();
+          removeTab(plugins[i].name);
           
           // add new tab
-          $('#values .nav-tabs').append('<li><a href="#'+plugins[i].name+'" data-toggle="tab">'+plugins[i].title+'</a></li>');
-          $('#values .tab-content').append('<div class="tab-pane" id="'+plugins[i].name+'"></div>');
+          addTab(plugins[i].name, plugins[i].title);
           
           // set to foreground
           if (plugins[i].foreground) {
-            // remove active class from elements
-            $('#values .nav-tabs li').removeClass('active');
-            $('#values .tab-pane').removeClass('active');
-            // add active to plugin
-            $('#values .nav-tabs a[href="#'+plugins[i].name+'"]').parent().addClass('active');
-            $('#values #'+plugins[i].name).addClass('active');
+            setActive(plugins[i].name);
           }
           
           // set correct height for plugin
@@ -330,8 +339,21 @@ Application.prototype.drawData = function(dataBaseClass, dataDomain) {
         // execute plugin
         if (plugins[i].checkConditions()) plugins[i].run(currentClass, dataDomain);
       }
+      
+    } else {
+      if (plugins[i].destroy) {
+        removeTab(plugins[i].name);
+      }
+      setActive('domain-view');
     }
   }
+  
+  // register event listeners for close button
+  $('.nav-tabs > li .close').off('click').click(function() {
+    var name = $(this).prev().attr('href').replace('#', '');
+    removeTab(name);
+    setActive('domain-view');
+  });
 },
 
 /** 
@@ -704,7 +726,7 @@ Application.prototype.drawReferences = function(data) {
   });
   
   // refresh on link / unlink success or close on link / unlink fail
-  $(document).ajaxComplete(function(e, xhr, settings) {
+  $(document).off('ajaxComplete').ajaxComplete(function(e, xhr, settings) {
     if (settings.url.indexOf('link') != -1) {
       xhr.success(function() {
         $('#view-table').trigger('getReferences', data.getElementsByTagName('path')[0].textContent);

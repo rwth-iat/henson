@@ -6,6 +6,7 @@ var plugins = [
     activate: {always: true}, // activate condition, implemented: {exactClass: 'partial/path/of/class'}, {baseClass: 'partial/name/of/baseclass' or {always: true}
     foreground: true, // switch plugin to foreground on activation?
     refresh: true, // reload data on refresh?
+    destroy: false, // should the plugin be destroyed if the activation condition does not match anymore?
     checkConditions: function() { // startup function that checks conditions before running the plugin
       return true;
     },
@@ -25,9 +26,11 @@ var plugins = [
     name: 'cshmi-view',
     title: 'CSHMI',
     author: 'Christoph Sachsenhausen',
-    activate: {baseClass: 'cshmi/Group'},
+    //activate: {baseClass: 'cshmi/Group'},
+    activate: {baseClass: 'ov'},
     foreground: true,
-    refresh: false,
+    refresh: true,
+    destroy: true,
     checkConditions: function() {
       var req = new XMLHttpRequest();
       req.open('HEAD', 'http://'+app.serverConnection.getServerAddress()+':'+app.serverConnection.getServerPort()+'/hmi/', false);
