@@ -102,6 +102,35 @@ Application.objCache = (function() {
     }
   };
 })();
+
+Application.history = (function() {
+  return {
+    getServerAddress: function() {
+      return (this.getHashArray()[0] || $('input#server-address').val());
+    },
+    getServerName: function() {
+      return (this.getHashArray()[1] || $('input#server-name').val());
+    },
+    getPath: function() {
+      var hashArray = this.getHashArray();
+      hashArray.shift();
+      hashArray.shift();
+      return ('/'+hashArray.join('/') || $('input#path').val());
+    },
+    setHash: function(serverAddress, serverName, path) {
+      if (serverAddress == null) serverAddress = this.getServerAddress();
+      if (serverName == null) serverName = this.getServerName();
+      if (path == null) path = this.getPath();
+      window.location.href = '#'+serverAddress+'/'+serverName+path;
+    },
+    getHash: function() {
+      return window.location.hash.replace('#', '');
+    },
+    getHashArray: function() {
+      return (this.getHash().split('/') || []);
+    }
+  };
+})();
   
 /**
  * Set current active path in interface and browser history.
@@ -110,8 +139,7 @@ Application.objCache = (function() {
  */
 Application.prototype.setActivePath = function(activePath) {
   $('input#path').val(activePath);
-  window.location.href = '#'+activePath;
-  //Application.objCache.log();
+  Application.history.setHash(null, null, activePath); 
 },
 
 /**
@@ -129,12 +157,14 @@ Application.prototype.getServer = function() {
 Application.prototype.drawServer = function(data) {
   $('#server-name').empty().prop('disabled', false);
   var servers = data.getElementsByTagName('identifier');
+
   for (var i = 0; i < servers.length; i++) {
-    $('#server-name').append('<option>'+servers[i].textContent+'</option>');
+    $('#server-name').append('<option'+(servers[i].textContent == Application.history.getServerName() ? ' selected' : '')+'>'+servers[i].textContent+'</option>');
   }
   
   // register event handler for changing server name
   $('#server-name').off('change').change(function() {
+    Application.history.setHash(null, $('#server-name').val(), null); 
     $('#view-table').trigger('setServer', $('#server-name').val());
   });
   

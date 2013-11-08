@@ -93,6 +93,12 @@ var registerContextMenuEventListeners = function() {
 }
 
 $(document).ready(function() {
+
+  // is URL set in hash? then copy to input
+  if (Application.history.getHashArray().length > 0) {
+    $('input#server-address').val(Application.history.getServerAddress());
+    $('input#path').val(Application.history.getPath());
+  }
   
   // listen to clicks on nav buttons
   $('#button-submit').off('click').click(function(event) {
@@ -116,12 +122,7 @@ $(document).ready(function() {
     
     // read history change event
     $(window).off('popstate').on('popstate', function(e) {
-      var hash = window.location.hash.replace('#', '');
-      try {
-        $('#tree').dynatree('getTree').getNodeByKey(hash).activate();
-      } catch(e) {
-        app.expandNodes(hash);
-      }
+      app.expandNodes(Application.history.getPath());
     });
     
     $(window).resize();
