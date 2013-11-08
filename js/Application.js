@@ -20,26 +20,49 @@ Application.objCache = (function() {
     name: 'root',
     type: undefined,
     access: 'read',
+    classId: undefined,
+    parent: undefined,
     children: []
   };
   return {
-    getName: function(path) {
-      return this.findObj(this.splitPath(path)).name;
+    getName: function(node) {
+      if (typeof node !== 'string') return node.name;
+      return this.findObj(this.splitPath(node)).name;
     },
-    getType: function(path) {
-      return this.findObj(this.splitPath(path)).type;
+    getType: function(node) {
+      if (typeof node !== 'string') return node.type;
+      return this.findObj(this.splitPath(node)).type;
     },
-    getAccess: function(path) {
-      return this.findObj(this.splitPath(path)).access;
+    getAccess: function(node) {
+      if (typeof node !== 'string') return node.access;
+      return this.findObj(this.splitPath(node)).access;
     },
-    getChildren: function(path) {
-      return this.findObj(this.splitPath(path)).children;
+    getClassId: function(node) {
+      if (typeof node !== 'string') return node.classId;
+      return this.findObj(this.splitPath(node)).classId;
     },
-    removeChildren: function(path) {
-      this.findObj(this.splitPath(path)).children = [];
+    getParent: function(node) {
+      if (typeof node !== 'string') return node.parent;
+      return this.findObj(this.splitPath(node)).parent;
     },
-    addChild: function(path, name, type, access) {
-      var obj = this.findObj(this.splitPath(path));
+    getChildren: function(node) {
+      if (typeof node !== 'string') return node.children;
+      return this.findObj(this.splitPath(node)).children;
+    },
+    removeChildren: function(node) {
+      if (typeof node !== 'string') {
+        node.children = [];
+      } else {
+        this.findObj(this.splitPath(node)).children = [];
+      }
+    },
+    addChild: function(node, name, type, access, classId) {
+      var obj;
+      if (typeof node !== 'string') {
+        obj = node;
+      } else {
+        obj = this.findObj(this.splitPath(node));
+      }
       var exists = false;
       var i = 0;
       while (!exists && i<obj.children.length) {
@@ -47,10 +70,11 @@ Application.objCache = (function() {
           exists = true;
           obj.children[i].type = type;
           obj.children[i].access = access;
+          obj.children[i].classId = classId;
         }
         i++;
       }
-      if (!exists) obj.children.push({name: name, type: type, access: access, children: []});
+      if (!exists) obj.children.push({name: name, type: type, access: access, classId: classId, parent: obj, children: []});
     },
     splitPath: function(path) {
       var pathElements = path.split(/[\/\.]+/);
@@ -87,6 +111,7 @@ Application.objCache = (function() {
 Application.prototype.setActivePath = function(activePath) {
   $('input#path').val(activePath);
   window.location.href = '#'+activePath;
+  Application.objCache.log();
 },
 
 /**
@@ -192,7 +217,8 @@ Application.prototype.drawNode = function(data, node) {
   for (var i = 0; i < listVariable.length; i++) {
     var el = listVariable[i].getElementsByTagName('identifier')[0].textContent;
     var access = listVariable[i].getElementsByTagName('access')[0].textContent;
-    Application.objCache.addChild(node.data.key, el, 'variable', access);
+    var classId = listVariable[i].getElementsByTagName('type')[0].textContent;
+    Application.objCache.addChild(node.data.key, el, 'variable', access, classId);
   }
   
   // add domains and links to tree
@@ -202,6 +228,7 @@ Application.prototype.drawNode = function(data, node) {
     for (var i = 0; i < listLink.length; i++) {
       var el = listLink[i].getElementsByTagName('identifier')[0].textContent;
       var access = listLink[i].getElementsByTagName('access')[0].textContent;
+      var classId = listLink[i].getElementsByTagName('associationIdentifier')[0].textContent;
       var seperator = (access.indexOf('part') == -1 ? '/' : '.');
       res.push(
         {
@@ -212,12 +239,13 @@ Application.prototype.drawNode = function(data, node) {
           addClass: 'context-menu-link'
         }
       );
-      Application.objCache.addChild(node.data.key, el, 'link', access);
+      Application.objCache.addChild(node.data.key, el, 'link', access, classId);
     }
     
     for (var i = 0; i < listDomain.length; i++) {
       var el = listDomain[i].getElementsByTagName('identifier')[0].textContent;
       var access = listDomain[i].getElementsByTagName('access')[0].textContent;
+      var classId = listDomain[i].getElementsByTagName('classIdentifier')[0].textContent;
       var seperator = (access.indexOf('part') == -1 ? '/' : '.');
       res.push(
         {
@@ -229,7 +257,7 @@ Application.prototype.drawNode = function(data, node) {
           addClass: 'context-menu-domain'
         }
       );
-      Application.objCache.addChild(node.data.key, el, 'domain', access);
+      Application.objCache.addChild(node.data.key, el, 'domain', access, classId);
     }
   } else {
     // remove expandable status if no children found
@@ -378,10 +406,7 @@ Application.prototype.appendRows = function(list, path, type) {
     l['creation'] = d.toLocaleString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'});
     
     l['semantics'] = list[i].getElementsByTagName('semantics')[0].textContent;
-    
-    // Add to object cache
-    Application.objCache.addChild(path, l['identifier'], type, l['access']);
-    
+
     // Type specific values, pretty output, icons
     if (type == 'domain') {
       l['type'] = 'Domain';
@@ -412,6 +437,9 @@ Application.prototype.appendRows = function(list, path, type) {
       l['class'] = 'unknown';
       l['path'] = path;
     }
+    
+    // Add to object cache
+    Application.objCache.addChild(path, list[i].getElementsByTagName('identifier')[0].textContent, type, l['access'], l['class']);
     
     // add data to table
     $('#domain-view>table>tbody').append('<tr data-toggle="context" data-target="#context-menu-'+type+'" data-path="'+l['path']+'" data-type="'+type+'"></tr>');
