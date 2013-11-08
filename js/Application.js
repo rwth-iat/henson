@@ -20,7 +20,7 @@ Application.objCache = (function() {
     name: 'root',
     type: undefined,
     access: 'read',
-    classId: undefined,
+    classId: '/acplt/ov/domain',
     parent: undefined,
     children: []
   };
@@ -43,7 +43,7 @@ Application.objCache = (function() {
     },
     getParent: function(node) {
       if (typeof node !== 'string') return node.parent;
-      return this.findObj(this.splitPath(node)).parent;
+      return (this.findObj(this.splitPath(node)).parent || cache);
     },
     getChildren: function(node) {
       if (typeof node !== 'string') return node.children;
@@ -111,7 +111,7 @@ Application.objCache = (function() {
 Application.prototype.setActivePath = function(activePath) {
   $('input#path').val(activePath);
   window.location.href = '#'+activePath;
-  Application.objCache.log();
+  //Application.objCache.log();
 },
 
 /**
@@ -282,33 +282,7 @@ Application.prototype.drawNode = function(data, node) {
  * @param path Query path to server
  */
 Application.prototype.getData = function(path) {
-  this.serverConnection.getEP(path, this.getBaseClass, this.drawResult, '', this);
-},
-
-
-/**
- * Checks if domain has a baseclass. If available, adds to data.
- * Draws view table.
- *
- * @param data AJAX data from previous request
- */
-Application.prototype.getBaseClass = function(data, node, self) {
-
-  var hasBaseClass = false,
-  links = data.getElementsByTagName('LinkEngProps');
-  
-  for (var i = 0; i < links.length && !hasBaseClass; i++) {
-    if (links[i].getElementsByTagName('identifier')[0].textContent == 'baseclass') {
-      hasBaseClass = true;
-      var separator = (links[i].getElementsByTagName('access')[0].textContent.indexOf('part') != -1 ? '.' : '/');
-    }
-  }
-  
-  if (hasBaseClass) {
-    self.serverConnection.getVar(data.getElementsByTagName('path')[0].textContent+separator+'baseclass', self.drawData, self.drawResult, data);
-  } else {
-    self.drawData(null, data);
-  }
+  this.serverConnection.getEP(path, this.drawData, this.drawResult);
 },
 
 /**
@@ -317,7 +291,7 @@ Application.prototype.getBaseClass = function(data, node, self) {
  *
  * @param dataDomain XML data from AJAX request to server
  */
-Application.prototype.drawData = function(dataBaseClass, dataDomain) {
+Application.prototype.drawData = function(dataDomain) {
   
   var removeTab = function(name) {
     $('#values .nav-tabs a[href="#'+name+'"]').parent().remove();
@@ -335,16 +309,15 @@ Application.prototype.drawData = function(dataBaseClass, dataDomain) {
   };
 
   // check plugins
-  var currentClass = dataDomain.getElementsByTagName('path')[0].textContent,
-  baseClass = '';
-  if (dataBaseClass != null) {
-    baseClass = dataBaseClass.getElementsByTagName('string')[0].textContent;
-  }
+  var currentClass = dataDomain.getElementsByTagName('path')[0].textContent;
+  var classId = Application.objCache.getClassId(currentClass);
   
   for (var i=0; i<plugins.length; i++) {
   
     // is the selected domain equal to activation requirement?
-    if (currentClass.indexOf(plugins[i].activate.exactClass) != -1 || baseClass.indexOf(plugins[i].activate.baseClass) != -1 || plugins[i].activate.always) {
+    if (currentClass.indexOf(plugins[i].activate.exactClass) != -1 || 
+      classId.indexOf(plugins[i].activate.baseClass) != -1 || 
+      plugins[i].activate.always) {
       
       // load the plugin only if it does not exist yet OR it exists in DOM and is allowed to refresh?
       var pluginExists = ($('#'+plugins[i].name).length > 0 ? true : false);
