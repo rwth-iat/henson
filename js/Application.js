@@ -181,7 +181,6 @@ Application.prototype.getRoot = function(rootNode, serverName) {
  */
 Application.prototype.drawRoot = function(data, rootNode, serverName) {
   rootNode.data.key = 'server';
-  rootNode.removeChildren();
   
   rootNode.addChild({title: serverName, isLazy: true, key: '/', isFolder: true, type: 'domain', addClass: 'context-menu-domain'});
 

@@ -34,6 +34,7 @@ var initializeTree = function() {
     },
     debugLevel: 1
   });
+  $('#tree').dynatree('getRoot').removeChildren();
 }
 
 var registerCustomEventListeners = function() {
