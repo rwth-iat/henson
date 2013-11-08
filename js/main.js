@@ -23,6 +23,11 @@ var initializeTree = function() {
         }, parseInt($('#refresh-timeout').val())*1000);
       }
     },
+    onClick: function(node) {
+      if (node.isActive() && node.data.type == 'link') {
+        app.getReferences(node.data.key);
+      }
+    },
     onExpand: function(flag, node) {
       // when closing node set to lazy again
       if (!flag) node.resetLazy();
