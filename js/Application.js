@@ -10,9 +10,8 @@
  * @param serverConnection Object of type ServerConnection
  * @param activePath Working path to start the application with
  */
-var Application = function(serverConnection, activePath) {
+var Application = function(serverConnection) {
   this.serverConnection = serverConnection;
-  this.setActivePath(activePath);
 }
 
 // TODO Docs
@@ -87,6 +86,7 @@ Application.objCache = (function() {
  */
 Application.prototype.setActivePath = function(activePath) {
   $('input#path').val(activePath);
+  window.location.href = '#'+activePath;
 },
 
 /**

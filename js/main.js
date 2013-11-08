@@ -100,7 +100,7 @@ $(document).ready(function() {
     event.preventDefault();
     
     var conn = new ServerConnection($('#server-address').val());
-    app = new Application(conn, $('#path').val());
+    app = new Application(conn);
     
     initializeTree();
     registerCustomEventListeners();
@@ -111,6 +111,16 @@ $(document).ready(function() {
     // save clicked path to global variable
     $('#view-table').off('saveClickedPath').on('saveClickedPath', function(e, path) {
       clickedPath = path;
+    });
+    
+    // read history change event
+    $(window).off('popstate').on('popstate', function(e) {
+      var hash = window.location.hash.replace('#', '');
+      try {
+        $('#tree').dynatree('getTree').getNodeByKey(hash).activate();
+      } catch(e) {
+        app.expandNodes(hash);
+      }
     });
     
     $(window).resize();
