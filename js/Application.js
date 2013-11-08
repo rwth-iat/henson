@@ -509,7 +509,7 @@ Application.prototype.setVariable = function(path, newValue, newVartype) {
  * @param objectPath Path to create object
  */
 Application.prototype.getInstantiate = function(objectPath) {
-  this.serverConnection.getVar('/acplt/ov/class.instance', this.drawInstantiate, this.drawResult, objectPath); // add to config: /acplt/ov/class.instance
+  this.serverConnection.getVar('/acplt/ov/library.instance', this.drawInstantiate, this.drawResult, objectPath); // add to config: /acplt/ov/library.instance
 },
 
 /**
@@ -519,8 +519,8 @@ Application.prototype.getInstantiate = function(objectPath) {
  * @param objectPath Path to create object
  */
 Application.prototype.drawInstantiate = function(data, objectPath) {
-  var access = Application.objCache.getAccess(objectPath)
-  var seperator = (access.indexOf('part') == -1 ? '/' : '.');
+  var access = Application.objCache.getAccess(objectPath),
+  seperator = (access.indexOf('part') == -1 ? '/' : '.');
   $('#modal-instantiate #instantiate-object-path').val(objectPath + (objectPath != '/' ? seperator : '') + 'NewInstance');
   
   var list = data.getElementsByTagName('string');
@@ -532,13 +532,19 @@ Application.prototype.drawInstantiate = function(data, objectPath) {
   }
   $('#modal-instantiate #instantiate-class-path').append(appendArray);
   
+  // register event handler for dropdown change
+  $('#modal-instantiate #instantiate-class-path').off('change').change(function() {
+    $('#view-table').trigger('getInstantiable', $('#modal-instantiate #instantiate-class-path').val());
+  });
+  $('#modal-instantiate #instantiate-class-path').change();
+  
   // register event handler for save button
   $('#modal-instantiate #save-instantiate').off('click').click(function() {
     $('#view-table').trigger(
       'createObject',
       {
         path: $('#modal-instantiate #instantiate-object-path').val(),
-        factory: $('#modal-instantiate #instantiate-class-path').val()
+        factory: $('#modal-instantiate #instantiate-instantiable-path').val()
       }
     );
   });
@@ -551,6 +557,35 @@ Application.prototype.drawInstantiate = function(data, objectPath) {
       });
     }
   });
+},
+
+/**
+ * Gets data to fill instantiable dropdown.
+ *
+ * @param path Path to look for instantiables
+ */
+Application.prototype.getInstantiable = function(path) {
+  this.serverConnection.getEP(path, this.drawInstantiable, this.drawResult);
+},
+
+/**
+ * Fills instantiable dropwdown.
+ *
+ * @param data XML data from AJAX request to server
+ */
+Application.prototype.drawInstantiable = function(data) {
+  var domains = data.getElementsByTagName('DomainEngProps'),
+  path = data.getElementsByTagName('path')[0].textContent,
+  instantiables = [];
+  for (var i=0; i<domains.length; i++) {
+    var access = domains[i].getElementsByTagName('access')[0].textContent;
+    if (access.indexOf('instantiable') != -1) {
+      var instantiableName = domains[i].getElementsByTagName('identifier')[0].textContent,
+      separator = (access.indexOf('part') != -1 ? '.' : '/');
+      instantiables.push('<option>'+path+separator+instantiableName+'</option>');
+    }
+  }
+  $('#modal-instantiate #instantiate-instantiable-path').empty().append(instantiables);
 },
 
 /**

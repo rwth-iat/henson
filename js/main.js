@@ -71,6 +71,9 @@ var registerCustomEventListeners = function() {
   $('#view-table').off('refresh').on('refresh', function(e, path) {
     app.refreshNode($('#tree').dynatree('getTree').getNodeByKey(path));
   });
+  $('#view-table').off('getInstantiable').on('getInstantiable', function(e, path) {
+    app.getInstantiable(path);
+  });
 }
 
 var registerContextMenuEventListeners = function() {
