@@ -474,6 +474,8 @@ Application.prototype.drawVariable = function(data) {
   $('#modal-variable #variable-timestamp').val(v['timestamp']);
   $('#modal-variable #variable-quality-state option[value="'+v['state']+'"]').prop('selected', true);
   
+  $('#modal-variable .modal-title span').html(v['resourceLocator']);
+  
   $('#modal-variable').modal('show');
   
   // Register event handler for save button
@@ -694,6 +696,7 @@ Application.prototype.drawReferences = function(data) {
       $('#modal-references .modal-body > table tr:last-child').append('<td><button type="button" class="btn btn-mini" title="unlink"><i class="fa fa-unlink"></i></button></td>');
     }
   }
+  $('#modal-references .modal-title span').html(data.getElementsByTagName('path')[0].textContent);
   $('#modal-references').modal('show');
   
   // register event handler for click on link
