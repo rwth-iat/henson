@@ -646,6 +646,16 @@ Application.prototype.drawRename = function(path) {
       newName: $('#modal-rename #rename-object-name').val()
     });
   });
+  
+  // refresh on rename success
+  $(document).off('ajaxComplete').ajaxComplete(function(e, xhr, settings) {
+    if (settings.url.indexOf('renameObject') != -1) {
+      xhr.success(function() {
+        var pathArray = path.split(/[\/\.](?=[^\/.]*$)/); // find last '/' or '.' of the path
+        $('#view-table').trigger('refresh', pathArray[0]);
+      });
+    }
+  });
 },
 
 /**
@@ -666,7 +676,8 @@ Application.prototype.renameObject = function(path, newName) {
 Application.prototype.drawLink = function(path) {
   
   // is path a domain or a link?
-  if (Application.objCache.getType(path) == 'domain') {
+  var type = Application.objCache.getType(path);
+  if (type == 'domain') {
     $('#modal-link #link-element').val(path);
     $('#modal-link #link-path').val('/');
   } else {
@@ -681,6 +692,20 @@ Application.prototype.drawLink = function(path) {
       path: $('#modal-link #link-path').val(),
       element: $('#modal-link #link-element').val()
     });
+  });
+  
+  // refresh on link success
+  $(document).off('ajaxComplete').ajaxComplete(function(e, xhr, settings) {
+    if (settings.url.indexOf('link') != -1) {
+      xhr.success(function() {
+        if (type == 'domain') {
+          $('#view-table').trigger('refresh', path);
+        } else {
+          var pathArray = path.split(/[\/\.](?=[^\/.]*$)/); // find last '/' or '.' of the path
+          $('#view-table').trigger('refresh', pathArray[0]);
+        }
+      });
+    }
   });
 },
 
