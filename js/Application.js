@@ -830,8 +830,8 @@ Application.prototype.expandNodes = function(path) {
       // scroll to active node
       var activeNode = $('#tree').dynatree('getActiveNode');
       var activeLI = activeNode && activeNode.li;
-      $('ul.dynatree-container').animate({
-        scrollTop: $(activeLI).offset().top - $('ul.dynatree-container').offset().top + $('ul.dynatree-container').scrollTop() - 50
+      $('#tree ul.dynatree-container').animate({
+        scrollTop: $(activeLI).offset().top - $('#tree ul.dynatree-container').offset().top + $('#tree ul.dynatree-container').scrollTop() - 50
       }, 0);
       
     } else if (status == 'notfound') {
@@ -905,13 +905,13 @@ Application.prototype.refreshNode = function(node) {
  */
 Application.prototype.addContextMenu = function() {
   // add context menu to nodes with corresponding class
-  $('ul.dynatree-container .context-menu-domain').attr('data-target', '#context-menu-domain');
-  $('ul.dynatree-container .context-menu-domain').attr('data-toggle', 'context');
-  $('ul.dynatree-container .context-menu-link').attr('data-target', '#context-menu-link');
-  $('ul.dynatree-container .context-menu-link').attr('data-toggle', 'context');
+  $('#tree ul.dynatree-container .context-menu-domain').attr('data-target', '#context-menu-domain');
+  $('#tree ul.dynatree-container .context-menu-domain').attr('data-toggle', 'context');
+  $('#tree ul.dynatree-container .context-menu-link').attr('data-target', '#context-menu-link');
+  $('#tree ul.dynatree-container .context-menu-link').attr('data-toggle', 'context');
   
   // save path of node that has been right clicked
-  $('ul.dynatree-container span.dynatree-node').mousedown(function(e) {
+  $('#tree ul.dynatree-container span.dynatree-node').mousedown(function(e) {
     if (e.which == 3) {
       var node = $.ui.dynatree.getNode(this);
       $('#view-table').trigger('saveClickedPath', node.data.key);

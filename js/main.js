@@ -164,7 +164,7 @@ $(document).ready(function() {
       return height;
     });
     
-    $('ul.dynatree-container').css('height', function() {
+    $('#tree ul.dynatree-container').css('height', function() {
       height = $(window).height()*0.96 - $('.navbar').outerHeight(true) - $('#nav-form').outerHeight(true);
       return height;
     });
