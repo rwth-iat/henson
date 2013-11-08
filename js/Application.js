@@ -12,6 +12,7 @@
  */
 var Application = function(serverConnection, activePath) {
   this.serverConnection = serverConnection;
+  this.setActivePath(activePath);
 }
 
 // TODO Docs
