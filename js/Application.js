@@ -80,7 +80,7 @@ Application.objCache = (function() {
 })();
   
 /**
- * Set current active path in interface.
+ * Set current active path in interface and browser history.
  *
  * @param activePath New active path
  */
@@ -530,7 +530,7 @@ Application.prototype.drawInstantiate = function(data, objectPath) {
   for (var i=0; i<list.length; i++) {
     appendArray[i] = '<option>'+list[i].textContent+'</option>';
   }
-  $('#modal-instantiate #instantiate-class-path').append(appendArray);
+  $('#modal-instantiate #instantiate-class-path').empty().append(appendArray);
   
   // register event handler for dropdown change
   $('#modal-instantiate #instantiate-class-path').off('change').change(function() {
