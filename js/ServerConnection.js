@@ -34,6 +34,8 @@ ServerConnection.prototype.setServerAddress = function(address) {
   var port = parseInt(serverArray[1], 10);
   if (isNaN(port)) {
     this.setServerPort(7509);
+  } else {
+    this.setServerPort(port);
   }
 },
 
