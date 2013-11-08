@@ -1,4 +1,4 @@
-var conn, app, timer, clickedPath;
+var app, timer, clickedPath;
 
 var initializeTree = function() {
   $('#tree').dynatree({
@@ -36,7 +36,7 @@ var registerCustomEventListeners = function() {
     app.getPort(serverName);
   });
   $('#view-table').off('setPort').on('setPort', function(e, data) {
-    conn.setPort(data.port);
+    app.serverConnection.setServerPort(data.port);
     app.getRoot($('#tree').dynatree('getRoot'), data.serverName);
   });
   $('#view-table').off('getVariable').on('getVariable', function(e, path) {
@@ -91,7 +91,7 @@ $(document).ready(function() {
     // don't reload page on submit
     event.preventDefault();
     
-    conn = new ServerConnection($('#server-address').val());
+    var conn = new ServerConnection($('#server-address').val());
     app = new Application(conn, $('#path').val());
     
     initializeTree();
@@ -157,5 +157,4 @@ $(document).ready(function() {
   
   // fire it up
   $('#button-submit').trigger('click');
-
 });

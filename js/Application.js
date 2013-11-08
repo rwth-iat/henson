@@ -14,6 +14,7 @@ var Application = function(serverConnection, activePath) {
   this.serverConnection = serverConnection;
 }
 
+// TODO Docs
 Application.objCache = (function() {
   var cache = {
     name: 'root',
@@ -247,29 +248,62 @@ Application.prototype.drawNode = function(data, node) {
 },
 
 /**
- * Gets data for domain by AJAX request and draws view table on success.
+ * Gets data for domain by AJAX request.
  *
  * @param path Query path to server
  */
 Application.prototype.getData = function(path) {
-  this.serverConnection.getEP(path, this.drawData, this.drawResult, '');
+  this.serverConnection.getEP(path, this.getBaseClass, this.drawResult, '', this);
+},
+
+
+/**
+ * Checks if domain has a baseclass. If available, adds to data.
+ * Draws view table.
+ *
+ * @param data AJAX data from previous request
+ */
+Application.prototype.getBaseClass = function(data, node, self) {
+
+  var hasBaseClass = false,
+  links = data.getElementsByTagName('LinkEngProps');
+  
+  for (var i = 0; i < links.length && !hasBaseClass; i++) {
+    if (links[i].getElementsByTagName('identifier')[0].textContent == 'baseclass') {
+      hasBaseClass = true;
+      var separator = (links[i].getElementsByTagName('access')[0].textContent.indexOf('part') != -1 ? '.' : '/');
+    }
+  }
+  
+  if (hasBaseClass) {
+    self.serverConnection.getVar(data.getElementsByTagName('path')[0].textContent+separator+'baseclass', self.drawData, self.drawResult, data);
+  } else {
+    self.drawData(null, data);
+  }
 },
 
 /**
  * Draws view table from AJAX data.
  * If plugin ist set for this class, also launches the plugin.
  *
- * @param data XML data from AJAX request to server
+ * @param dataDomain XML data from AJAX request to server
  */
-Application.prototype.drawData = function(data) {
-  
+Application.prototype.drawData = function(dataBaseClass, dataDomain) {
+
   // check plugins
-  var currentClass = data.getElementsByTagName('path')[0].textContent;
+  var currentClass = dataDomain.getElementsByTagName('path')[0].textContent,
+  baseClass = '';
+  if (dataBaseClass != null) {
+    baseClass = dataBaseClass.getElementsByTagName('string')[0].textContent;
+  }
+  
   for (var i=0; i<plugins.length; i++) {
+  
     // is the selected domain equal to activation requirement?
-    if (currentClass.indexOf(plugins[i].activate.class) != -1 || plugins[i].activate.always) {
+    if (currentClass.indexOf(plugins[i].activate.exactClass) != -1 || baseClass.indexOf(plugins[i].activate.baseClass) != -1 || plugins[i].activate.always) {
       // load the plugin only if it does not exist yet OR it exists in DOM and is allowed to refresh?
       var pluginExists = ($('#'+plugins[i].name).length > 0 ? true : false);
+      
       if (!pluginExists || (pluginExists && plugins[i].refresh)) {
         if (plugins[i].name != 'domain-view') {
           // remove old tab
@@ -294,7 +328,7 @@ Application.prototype.drawData = function(data) {
           $(window).resize();
         }
         // execute plugin
-        plugins[i].run(currentClass, data);
+        if (plugins[i].checkConditions()) plugins[i].run(currentClass, dataDomain);
       }
     }
   }
