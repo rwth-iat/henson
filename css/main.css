@@ -27,10 +27,19 @@
   margin-left: 40px;
 }
 
+#search-tree {
+  width: 100%;
+  height: 300px;
+}
+
 .nav-tabs > li .close {
   margin-top: -30px;
   margin-right: 10px;
   float: right;
+}
+
+.modal form {
+  margin: 0;
 }
 
 .input-wrap-xlarge {

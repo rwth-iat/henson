@@ -144,8 +144,8 @@
             <form class="form-inline">
               <label for="new-link">New link to object:</label>
               <input type="text" id="new-link" class="input-xlarge" placeholder="Object path">
-              <button id="" class="btn btn-default" title="search"><i class="fa fa-search"></i></button>
-              <button id="button-new-link" class="btn btn-default" title="link"><i class="fa fa-link"></i></button>
+              <button href="#modal-search-tree" class="btn btn-default button-new-link-search" title="search" data-toggle="modal"><i class="fa fa-search"></i></button>
+              <button id="button-new-link" class="btn btn-primary" title="link"><i class="fa fa-link"></i></button>
             </form>
           </div>
           <div class="modal-footer">
@@ -274,6 +274,7 @@
     <div id="modal-rename" class="modal hide" role="dialog" tabindex="-1">
       <div class="modal-dialog">
         <div class="modal-content">
+          <form>
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title"><i class="fa fa-edit"></i> Rename</h4>
@@ -292,6 +293,7 @@
             <button id="save-rename" type="button" class="btn btn-primary" data-dismiss="modal">Rename</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           </div>
+          </form>
         </div>
       </div>
     </div>
@@ -327,6 +329,7 @@
                 <label class="control-label" for="link-path">Link Object:</label>
                 <div class="controls">
                   <input type="text" id="link-element" class="input-xlarge">
+                  <button href="#modal-search-tree" class="btn btn-default button-new-link-search" title="search" data-toggle="modal"><i class="fa fa-search"></i></button>
                 </div>
               </div>
               <div class="control-group">
@@ -345,17 +348,18 @@
       </div>
     </div>
     
-    <div id="modal-attributes" class="modal hide" role="dialog">
+    <div id="modal-search-tree" class="modal hide" role="dialog" tabeindex="-1">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title"><i class="fa fa-cogs"></i> Attributes</h4>
+            <h4 class="modal-title"><i class="fa fa-search"></i> Search</h4>
           </div>
           <div class="modal-body">
-            <ul></ul>
+            <div id="search-tree"></div>
           </div>
           <div class="modal-footer">
+            <button id="save-use" type="button" class="btn btn-primary" data-dismiss="modal">Use</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           </div>
         </div>

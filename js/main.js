@@ -125,6 +125,14 @@ $(document).ready(function() {
       app.expandNodes(Application.history.getPath());
     });
     
+    // listen to enter on modal
+    $('.modal').off('keyup').keyup(function(e) {
+      //if (e.keyCode == 13 && fokus auf modal ('.modal.in') && fokus nicht auf textarea) {
+      if (e.keyCode == 13 && $('.modal:visible').length > 0 && $('.modal:visible textarea:focus').length == 0) {
+        $('.modal:visible button.btn-primary').click();
+      }
+    });
+    
     $(window).resize();
   });
   $('#button-refresh').off('click').click(function(event) {
