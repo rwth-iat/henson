@@ -14,7 +14,7 @@
   width: 40px;
 }
 
-#main-alert {
+#spinner, #main-alert {
   position: absolute;
   top: 20px;
   left: 30%;

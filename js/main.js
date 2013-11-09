@@ -167,6 +167,15 @@ $(document).ready(function() {
     }
   });
   
+  // show spinner on ajax load
+  $(document).ajaxStart(function() {
+    var spinner = new Spinner({length: 7, width: 3, color: '#666'}).spin(document.getElementById('spinner'));
+  }).ajaxStop(function() {
+    $('#spinner').empty();
+  }).ajaxError(function() {
+    $('#spinner').empty();
+  });
+  
   // Adjust viewport on resize
   $(window).resize(function() {
     $('#values .tab-pane').css('height', function() {
