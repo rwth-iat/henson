@@ -324,7 +324,7 @@ Application.prototype.drawData = function(dataDomain) {
   
   var removeTab = function(name) {
     $('#values .nav-tabs a[href="#'+name+'"]').parent().remove();
-    $('#values .tab-content #'.name).remove();
+    $('#values .tab-content #'+name).remove();
   };
   var addTab = function(name, title) {
     $('#values .nav-tabs').append('<li><a href="#'+name+'" data-toggle="tab">'+title+'&nbsp;&nbsp;&nbsp;</a><button type="button" class="close" title="close plugin">&times;</button></li>');
