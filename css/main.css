@@ -20,10 +20,6 @@
   left: 30%;
   right: 30%;
   text-align: center;
-  z-index: 9998;
-}
-
-#spinner {
   z-index: 9999;
 }
 

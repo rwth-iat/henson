@@ -2,7 +2,7 @@ var app, timer, clickedPath;
 
 var initializeTree = function() {
   $('#tree').dynatree({
-    keyPathSeparator: '|',
+    keyPathSeparator: "|",
     // lazy read: load nodes when expanded with ajax
     onLazyRead: function(node) {
       app.getNode(node, node.data.key);
@@ -35,19 +35,6 @@ var initializeTree = function() {
     debugLevel: 1
   });
   $('#tree').dynatree('getRoot').removeChildren();
-}
-
-var initializeSearchTree = function() {
-  $('#search-tree').dynatree({
-    keyPathSeparator: '|',
-    // lazy read: load nodes when expanded with ajax
-    onLazyRead: function(node) {
-      app.getNode(node, node.data.key);
-    }
-  });
-  var rootNode = $('#search-tree').dynatree('getRoot');
-  rootNode.removeChildren();
-  app.getRoot(rootNode, $('#server-name').val());
 }
 
 var registerCustomEventListeners = function() {
@@ -167,15 +154,6 @@ $(document).ready(function() {
   $('#button-link').off('click').click(function(event) {
     event.preventDefault();
     app.drawLink($("#tree").dynatree("getActiveNode").data.key);
-  });
-  
-  // search tree modal
-  $('.button-new-link-search').off('click').click(function() {
-    initializeSearchTree();
-  });
-  $('#save-use').off('click').click(function() {
-    var nodeKey = $('#search-tree').dynatree('getActiveNode').data.key;
-    $('.modal:visible .link-search-tree').val(nodeKey);
   });
   
   // Set refresh timeout
