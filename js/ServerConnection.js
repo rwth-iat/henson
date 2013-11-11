@@ -10,6 +10,7 @@
 var ServerConnection = function(address) {
   this.setServerAddress(address);
   this.cache = true;
+  this.timeout = 5000;
 }
 
 /**
@@ -76,6 +77,7 @@ ServerConnection.prototype.getServer = function(serverName, successCallback, fai
     url: this.getURL(serverName, 'getServer'),
     dataType: 'xml',
     cache: this.cache,
+    timeout: this.timeout,
     success: function(data, textStatus) {
       successCallback(ServerConnection.prototype.appendPath(data, serverName));
     },
@@ -100,6 +102,7 @@ ServerConnection.prototype.getEP = function(path, successCallback, failCallback,
     url: this.getURL(path, 'getEP'),
     dataType: 'xml',
     cache: this.cache,
+    timeout: this.timeout,
     success: function(data, textStatus) {
       successCallback(ServerConnection.prototype.appendPath(data, path), node, callbackVar);
     },
@@ -123,6 +126,7 @@ ServerConnection.prototype.getVar = function(path, successCallback, failCallback
     url: this.getURL(path, 'getVar'),
     dataType: 'xml',
     cache: this.cache,
+    timeout: this.timeout,
     success: function(data) {
       successCallback(ServerConnection.prototype.appendPath(data, path), callbackVar);
     },
@@ -151,6 +155,7 @@ ServerConnection.prototype.setVar = function(path, newValue, newVartype, success
     },
     dataType: 'xml',
     cache: this.cache,
+    timeout: this.timeout,
     success: function(data, textStatus) {
       successCallback(path, textStatus, 'Set Variable');
     },
@@ -177,6 +182,7 @@ ServerConnection.prototype.createObject = function(path, factory, successCallbac
     },
     dataType: 'xml',
     cache: this.cache,
+    timeout: this.timeout,
     success: function(data, textStatus) {
       successCallback(path, textStatus, 'Create Object');
     },
@@ -199,6 +205,7 @@ ServerConnection.prototype.deleteObject = function(path, successCallback, failCa
     url: this.getURL(path, 'deleteObject'),
     dataType: 'xml',
     cache: this.cache,
+    timeout: this.timeout,
     success: function(data, textStatus) {
       successCallback(path, textStatus, 'Delete Object');
     },
@@ -225,6 +232,7 @@ ServerConnection.prototype.renameObject = function(path, newName, successCallbac
       newname: newName
     },
     cache: this.cache,
+    timeout: this.timeout,
     success: function(data, textStatus) {
       successCallback(path, textStatus, 'Rename Object');
     },
@@ -251,6 +259,7 @@ ServerConnection.prototype.link = function(path, element, successCallback, failC
       element: element
     },
     cache: this.cache,
+    timeout: this.timeout,
     success: function(data, textStatus) {
       successCallback(path, textStatus, 'Link');
     },
@@ -277,6 +286,7 @@ ServerConnection.prototype.unlink = function(path, element, successCallback, fai
       element: element
     },
     cache: this.cache,
+    timeout: this.timeout,
     success: function(data, textStatus) {
       successCallback(path, textStatus, 'Unlink');
     },
