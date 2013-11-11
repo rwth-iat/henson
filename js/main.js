@@ -169,13 +169,18 @@ $(document).ready(function() {
     app.drawLink($("#tree").dynatree("getActiveNode").data.key);
   });
   
-  // search tree modal
+  // search tree button in link / references modal
   $('.button-new-link-search').off('click').click(function() {
     initializeSearchTree();
   });
   $('#save-use').off('click').click(function() {
     var nodeKey = $('#search-tree').dynatree('getActiveNode').data.key;
     $('.modal:visible .link-search-tree').val(nodeKey);
+  });
+  
+  // refresh button in variable modal
+  $('#refresh-variable').off('click').click(function() {
+    $('#view-table').trigger('getVariable', $('#modal-variable .modal-title span').html());
   });
   
   // Set refresh timeout
