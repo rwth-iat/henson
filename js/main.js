@@ -196,11 +196,11 @@ $(document).ready(function() {
   
   // show spinner on ajax load
   $(document).ajaxStart(function() {
-    var spinner = new Spinner({length: 7, width: 3, color: '#666'}).spin(document.getElementById('spinner'));
+    $('.cogs-wrap i').addClass('fa-spin');
   }).ajaxStop(function() {
-    $('#spinner').empty();
+    $('.cogs-wrap i').removeClass('fa-spin');
   }).ajaxError(function() {
-    $('#spinner').empty();
+    $('.cogs-wrap i').removeClass('fa-spin');
   });
   
   // Adjust viewport on resize

@@ -24,11 +24,17 @@
   
     <div class="navbar">
       <div class="navbar-inner">
-        <a href="#" class="brand"><i class="fa fa-cogs"></i> ACPLT Objektverwaltung</a>
+        <a href="#" class="brand">
+          <div class="cogs-wrap">
+            <i class="fa fa-cog"></i>
+            <i class="fa fa-cog fa-spin-reverse"></i>
+            <i class="fa fa-cog"></i>
+          </div>
+          ACPLT Objektverwaltung
+        </a>
       </div>
     </div>
     
-    <div id="spinner"></div>
     <div id="main-alert" class="alert hide"></div>
     
     <div id="wrapper" class="container-fluid">
@@ -113,8 +119,6 @@
         <li><a tabindex="-1" href="#modal-rename" data-toggle="modal"><i class="fa fa-edit"></i> Rename</a></li>
         <li class="divider"></li>
         <li><a tabindex="-1" href="#modal-link" data-toggle="modal"><i class="fa fa-link"></i> Link</a></li>
-        <!--<li class="divider"></li>
-        <li><a tabindex="-1" href="#modal-attributes" data-toggle="modal"><i class="fa fa-cogs"></i> Attributes</a></li>-->
       </ul>
     </div>
     
@@ -127,7 +131,7 @@
     
     <div id="context-menu-variable">
       <ul class="dropdown-menu" role="menu">
-        <li><a tabindex="-1" href="#"><i class="fa fa-clock-o"></i> Add Watch</a></li>
+        <!--<li><a tabindex="-1" href="#"><i class="fa fa-clock-o"></i> Add Watch</a></li>-->
         <li><a tabindex="-1" href="#modal-instantiate" data-toggle="modal"><i class="fa fa-folder"></i> Instantiate</a></li>
         <li><a tabindex="-1" href="#modal-link" data-toggle="modal"><i class="fa fa-link"></i> Link</a></li>
       </ul>
