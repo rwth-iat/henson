@@ -61,50 +61,10 @@
   background-position: -16px 0;
 }
 
-/* spinning animation */
-.fa-spin.fa-spin-reverse {
-  -moz-animation-direction: reverse;
-  -o-animation-direction: reverse;
-  -webkit-animation-direction: reverse;
-  animation-direction: reverse;
-}
-
-.cogs-wrap {
-  display: inline-block;
-  font-size: 4px;
-  width: 9em;
-  height: 9em;
-  position: relative;
-  margin: -10px 0 -5px 0;
-}
-  
-.cogs-wrap i {
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-  font-size: 4em;
-  text-align: center;
-  
-  position: absolute;
-  top: 0.3em;
-  right: 0.15em;
-  
-  -moz-animation-duration: 5s;
-  -o-animation-duration: 5s;
-  -webkit-animation-duration: 5s;
-  animation-duration: 5s;
-}
-
-.cogs-wrap i:nth-child(2) {
-  font-size: 6em;
-    top: 0.4em;
-    left: 0;
-}
-  
-.cogs-wrap i:nth-child(3) {
-  font-size: 4em;
-    top: 1.45em;
-    right: 0.15em;
+/* loading animation */
+.loading-animation {
+  margin-left: 30px;
+  font-size: 16px;
 }
 
 /* Dynatree */
