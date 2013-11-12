@@ -66,7 +66,7 @@ ServerConnection.prototype.setServerPort = function(port) {
  * @return URL path
  */
 ServerConnection.prototype.getURL = function(path, funcName) {
-  return 'http://'+this.address+':'+this.port+'/'+funcName+'?'+(funcName == 'getServer' ? 'servername' : 'path')+'='+path+(funcName == 'getEP' ? '&requestType=OT_ANY': '')+'&format=ksx';
+  return 'http://'+this.address+':'+this.port+'/'+funcName+'?'+(funcName == 'getServer' ? 'servername' : 'path')+'='+path+'&format=ksx';
 },
 
 /**
@@ -92,14 +92,18 @@ ServerConnection.prototype.getServer = function(serverName, successCallback, fai
  * Calls callback for success or failure.
  *
  * @param path Domain path
+ * @param requestType OT_DOMAIN, OT_VARIABLE, OT_ANY
  * @param successCallback Callback on success
  * @param failCallback Callback on failure
  * @param node Dynatree node to attach data to
  * @param callbackVar Additional callback parameter if needed
  */
-ServerConnection.prototype.getEP = function(path, successCallback, failCallback, node, callbackVar) {
+ServerConnection.prototype.getEP = function(path, requestType, successCallback, failCallback, node, callbackVar) {
   $.ajax({
     url: this.getURL(path, 'getEP'),
+    data: {
+      requestType: requestType
+    },
     dataType: 'xml',
     cache: this.cache,
     timeout: this.timeout,

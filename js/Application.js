@@ -146,7 +146,7 @@ Application.prototype.setActivePath = function(activePath) {
  * Gets list of all servers and draws selection modal on success.
  */
 Application.prototype.getServer = function() {
-  this.serverConnection.getEP('/servers', this.drawServer, this.drawResult);
+  this.serverConnection.getEP('/servers', 'OT_DOMAIN', this.drawServer, this.drawResult);
 },
 
 /**
@@ -200,7 +200,7 @@ Application.prototype.setPort = function(data) {
  * @param rootNode Dynatree root node
  */
 Application.prototype.getRoot = function(rootNode, serverName) {
-  this.serverConnection.getEP('/', this.drawRoot, this.drawResult, rootNode, serverName);
+  this.serverConnection.getEP('/', 'OT_ANY', this.drawRoot, this.drawResult, rootNode, serverName);
 },
 
 /**
@@ -225,7 +225,7 @@ Application.prototype.drawRoot = function(data, rootNode, serverName) {
  * @param path Query path to server
  */
 Application.prototype.getNode = function(node, path) {
-  this.serverConnection.getEP(path, this.drawNode, this.drawResult, node);
+  this.serverConnection.getEP(path, 'OT_ANY', this.drawNode, this.drawResult, node);
 },
 
 /**
@@ -311,7 +311,7 @@ Application.prototype.drawNode = function(data, node) {
  * @param path Query path to server
  */
 Application.prototype.getData = function(path) {
-  this.serverConnection.getEP(path, this.drawData, this.drawResult);
+  this.serverConnection.getEP(path, 'OT_ANY', this.drawData, this.drawResult);
 },
 
 /**
@@ -595,7 +595,7 @@ Application.prototype.drawInstantiate = function(data, objectPath) {
  * @param path Path to look for instantiables
  */
 Application.prototype.getInstantiable = function(path) {
-  this.serverConnection.getEP(path, this.drawInstantiable, this.drawResult);
+  this.serverConnection.getEP(path, 'OT_DOMAIN', this.drawInstantiable, this.drawResult);
 },
 
 /**
