@@ -106,10 +106,10 @@ Application.objCache = (function() {
 Application.history = (function() {
   return {
     getServerAddress: function() {
-      return (this.getHashArray()[0] || $('input#server-address').val());
+      return ($('input#server-address').val() || this.getHashArray()[0]);
     },
     getServerName: function() {
-      return (this.getHashArray()[1] || $('input#server-name').val());
+      return ($('input#server-name').val() || this.getHashArray()[1]);
     },
     getPath: function() {
       var hashArray = this.getHashArray();
@@ -809,7 +809,8 @@ Application.prototype.drawReferences = function(data) {
   });
   
   // register event handler for link button
-  $('#modal-references #button-new-link').off('click').click(function() {
+  $('#modal-references #button-new-link').off('click').click(function(event) {
+    event.preventDefault();
     $('#view-table').trigger(
       'link',
       {
