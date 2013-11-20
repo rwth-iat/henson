@@ -21,6 +21,10 @@ Application.objCache = (function() {
     type: undefined,
     access: 'read',
     classId: '/acplt/ov/domain',
+    semantics: 0,
+    creationTime: undefined,
+    techUnit: undefined,
+    comment: undefined,
     parent: undefined,
     children: []
   };
@@ -41,6 +45,22 @@ Application.objCache = (function() {
       if (typeof node !== 'string') return node.classId;
       return this.findObj(this.splitPath(node)).classId;
     },
+    getSemantics: function(node) {
+      if (typeof node !== 'string') return node.semantics;
+      return this.findObj(this.splitPath(node)).semantics;
+    },
+    getCreationTime: function(node) {
+      if (typeof node !== 'string') return node.creationTime;
+      return this.findObj(this.splitPath(node)).creationTime;
+    },
+    getTechUnit: function(node) {
+      if (typeof node !== 'string') return node.techUnit;
+      return this.findObj(this.splitPath(node)).techUnit;
+    },
+    getComment: function(node) {
+      if (typeof node !== 'string') return node.comment;
+      return this.findObj(this.splitPath(node)).comment;
+    },
     getParent: function(node) {
       if (typeof node !== 'string') return node.parent;
       return (this.findObj(this.splitPath(node)).parent || cache);
@@ -56,7 +76,7 @@ Application.objCache = (function() {
         this.findObj(this.splitPath(node)).children = [];
       }
     },
-    addChild: function(node, name, type, access, classId) {
+    addChild: function(node, name, type, access, classId, semantics, creationTime, techUnit, comment) {
       var obj;
       if (typeof node !== 'string') {
         obj = node;
@@ -71,10 +91,25 @@ Application.objCache = (function() {
           obj.children[i].type = type;
           obj.children[i].access = access;
           obj.children[i].classId = classId;
+          obj.children[i].semantics = semantics;
+          obj.children[i].creationTime = creationTime;
+          obj.children[i].techUnit = techUnit;
+          obj.children[i].comment = comment;
         }
         i++;
       }
-      if (!exists) obj.children.push({name: name, type: type, access: access, classId: classId, parent: obj, children: []});
+      if (!exists) obj.children.push({
+        name: name, 
+        type: type, 
+        access: access, 
+        classId: classId, 
+        semantics: semantics,
+        creationTime: creationTime,
+        techUnit: techUnit,
+        comment: comment,
+        parent: obj, 
+        children: []
+      });
     },
     splitPath: function(path) {
       var pathElements = path.split(/[\/\.]+/);
@@ -103,6 +138,7 @@ Application.objCache = (function() {
   };
 })();
 
+// TODO Docs
 Application.history = (function() {
   return {
     getServerAddress: function() {
@@ -247,7 +283,11 @@ Application.prototype.drawNode = function(data, node) {
     var el = listVariable[i].getElementsByTagName('identifier')[0].textContent;
     var access = listVariable[i].getElementsByTagName('access')[0].textContent;
     var classId = listVariable[i].getElementsByTagName('type')[0].textContent;
-    Application.objCache.addChild(node.data.key, el, 'variable', access, classId);
+    var semantics = listVariable[i].getElementsByTagName('semantics')[0].textContent;
+    var creationTime = listVariable[i].getElementsByTagName('creationtime')[0].textContent;
+    var techUnit = listVariable[i].getElementsByTagName('techunit')[0].textContent;
+    var comment = listVariable[i].getElementsByTagName('comment')[0].textContent;
+    Application.objCache.addChild(node.data.key, el, 'variable', access, classId, semantics, creationTime, techUnit, comment);
   }
   
   // add domains and links to tree
@@ -258,6 +298,10 @@ Application.prototype.drawNode = function(data, node) {
       var el = listLink[i].getElementsByTagName('identifier')[0].textContent;
       var access = listLink[i].getElementsByTagName('access')[0].textContent;
       var classId = listLink[i].getElementsByTagName('associationIdentifier')[0].textContent;
+      var semantics = listLink[i].getElementsByTagName('semantics')[0].textContent;
+      var creationTime = listLink[i].getElementsByTagName('creationtime')[0].textContent;
+      var comment = listLink[i].getElementsByTagName('comment')[0].textContent;
+    
       var seperator = (access.indexOf('part') == -1 ? '/' : '.');
       res.push(
         {
@@ -268,13 +312,16 @@ Application.prototype.drawNode = function(data, node) {
           addClass: 'context-menu-link'
         }
       );
-      Application.objCache.addChild(node.data.key, el, 'link', access, classId);
+      Application.objCache.addChild(node.data.key, el, 'link', access, classId, semantics, creationTime, undefined, comment);
     }
     
     for (var i = 0; i < listDomain.length; i++) {
       var el = listDomain[i].getElementsByTagName('identifier')[0].textContent;
       var access = listDomain[i].getElementsByTagName('access')[0].textContent;
       var classId = listDomain[i].getElementsByTagName('classIdentifier')[0].textContent;
+      var semantics = listDomain[i].getElementsByTagName('semantics')[0].textContent;
+      var creationTime = listDomain[i].getElementsByTagName('creationtime')[0].textContent;
+      var comment = listDomain[i].getElementsByTagName('comment')[0].textContent;
       var seperator = (access.indexOf('part') == -1 ? '/' : '.');
       res.push(
         {
@@ -286,7 +333,7 @@ Application.prototype.drawNode = function(data, node) {
           addClass: 'context-menu-domain'
         }
       );
-      Application.objCache.addChild(node.data.key, el, 'domain', access, classId);
+      Application.objCache.addChild(node.data.key, el, 'domain', access, classId, semantics, creationTime, undefined, comment);
     }
   } else {
     // remove expandable status if no children found
@@ -415,12 +462,14 @@ Application.prototype.appendRows = function(list, path, type) {
       l['class'] = list[i].getElementsByTagName('classIdentifier')[0].textContent;
       l['path'] = path + ((path == '/') || (path == '/vendor') ? '' : seperator) + encodeURI(l['identifier']);
       l['icon'] = 'fa fa-folder';
+      l['techUnit'] = undefined;
     } else if (type == 'variable') {
       l['type'] = 'Variable';
       l['class'] = list[i].getElementsByTagName('type')[0].textContent;
       l['path'] = path + (path == '/vendor' ? '/' : seperator) + encodeURI(l['identifier']);
       l['identifier'] = (path == '/vendor' ? '' : seperator) + l['identifier'];
       l['icon'] = 'fa fa-file-text';
+      l['techUnit'] = list[i].getElementsByTagName('techunit')[0].textContent;
     } else if (type == 'link') {
       var rel = list[i].getElementsByTagName('type')[0].textContent;
       if (rel == 'global-1-m') {
@@ -434,6 +483,7 @@ Application.prototype.appendRows = function(list, path, type) {
       l['path'] = path + (path == '/vendor' ? '/' : seperator) + encodeURI(l['identifier']);
       l['identifier'] = (path == '/vendor' ? '' : seperator) + l['identifier'];
       l['icon'] = 'fa fa-link';
+      l['techUnit'] = undefined;
     } else {
       l['type'] = 'unknown';
       l['class'] = 'unknown';
@@ -441,7 +491,7 @@ Application.prototype.appendRows = function(list, path, type) {
     }
     
     // Add to object cache
-    Application.objCache.addChild(path, list[i].getElementsByTagName('identifier')[0].textContent, type, l['access'], l['class']);
+    Application.objCache.addChild(path, list[i].getElementsByTagName('identifier')[0].textContent, type, l['access'], l['class'], l['semantics'], list[i].getElementsByTagName('creationtime')[0].textContent, l['techUnit'], l['comment']);
     
     // add data to table
     $('#domain-view>table>tbody').append('<tr data-toggle="context" data-target="#context-menu-'+type+'" data-path="'+l['path']+'" data-type="'+type+'"></tr>');
