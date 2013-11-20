@@ -175,6 +175,10 @@ $(document).ready(function() {
     event.preventDefault();
     app.drawLoadLibrary();
   });
+  $('#tree-controls button').off('click').click(function(event) {
+    event.preventDefault();
+    app.changeTreeWidth(parseInt($(this).attr('data-increase')));
+  });
   
   // search tree button in link / references modal
   $('.button-new-link-search').off('click').click(function() {
@@ -221,11 +225,16 @@ $(document).ready(function() {
       height = $(window).height()*0.96 - $('.navbar').outerHeight(true) - $('#nav-form').outerHeight(true);
       return height;
     });
+    
+    $('#tree-controls button').css('height', function() {
+      height = $(window).height()*0.96 - $('.navbar').outerHeight(true) - $('#nav-form').outerHeight(true) + 6;
+      return height;
+    });
   });
   
 	// add zen mode to inputs
   $('.zen-mode').zenForm({ trigger: '.zen-open', theme: 'light' });
-  
+
   // fire it up
   Application.history.initServerAddress();
   $('#button-submit').trigger('click');

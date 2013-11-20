@@ -154,8 +154,8 @@ Application.history = (function() {
       return ('/'+hashArray.join('/') || $('input#path').val());
     },
     initServerAddress: function() {
-      var serverAddress = this.getHashArray()[0];
-      if (serverAddress != undefined) $('input#server-address').val(serverAddress);
+      var hashArray = this.getHashArray();
+      if (hashArray.length != 0 && hashArray[0] != '') $('input#server-address').val(hashArray[0]);
     },
     setHash: function(serverAddress, serverName, path) {
       if (serverAddress == null) serverAddress = this.getServerAddress();
@@ -1092,4 +1092,23 @@ Application.prototype.showAlert = function(alertMessage, alertType) {
     $('#main-alert').fadeOut();
   }, 7000);
   
+},
+
+/**
+ * Adds columns to the width of the tree
+ *
+ * @param colums Number of columns to add (negative number subtracts)
+ */
+Application.prototype.changeTreeWidth = function(columns) {
+  var spanColumns = 0, 
+      i = 0;
+  while (spanColumns == 0 && i < 12) {
+    i++;
+    if ($('#tree').hasClass('span'+i)) spanColumns = i;
+  }
+  
+  if (spanColumns + columns > 0) {
+    $('#tree').removeClass('span'+spanColumns).addClass('span'+(spanColumns+columns));
+    $('#values').removeClass('span'+(12-spanColumns)).addClass('span'+(12-spanColumns-columns));
+  }
 };

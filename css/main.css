@@ -68,6 +68,21 @@
   line-height: 16px;
 }
 
+#tree-controls {
+  float: right;
+}
+
+#tree-controls:hover button {
+  visibility: visible;
+}
+
+#tree-controls button {
+  padding: 2px;
+  visibility: hidden;
+  background: #fafafa;
+  border-radius: 0;
+}
+
 /* Dynatree */
 ul.dynatree-container {
   border: 1px solid #ddd;
