@@ -544,8 +544,8 @@ Application.prototype.drawVariable = function(data) {
   var path = data.getElementsByTagName('path')[0].textContent;
   var v = [];
   
-  v['resourceLocator'] = path
-  v['value'] = data.getElementsByTagName('value')[0].textContent.replace(/^\s*[\r\n]/gm, ''); // remove empty lines
+  v['resourceLocator'] = path;
+  v['value'] = data.getElementsByTagName('value')[0].textContent.replace(/\n+$/g, ''); // remove empty line at end
   v['dataType'] = data.getElementsByTagName('value')[0].childNodes[0].nodeName;
   v['timestamp'] = data.getElementsByTagName('timestamp')[0].textContent;
   v['state'] = data.getElementsByTagName('state')[0].textContent;
