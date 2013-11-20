@@ -194,6 +194,14 @@ $(document).ready(function() {
     $('#view-table').trigger('getVariable', $('#modal-variable .modal-title span').html());
   });
   
+  // resize on collapse
+  $('.collapse').off('hidden').on('hidden', function() {
+    $(window).resize();
+  });
+  $('.collapse').off('shown').on('shown', function() {
+    $(window).resize();
+  });
+  
   // Set refresh timeout
   $('#refresh-timeout, #auto-refresh').off('change').change(function() {
     window.clearInterval(timer);
