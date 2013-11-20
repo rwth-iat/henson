@@ -225,9 +225,43 @@
                   </select>
                 </div>
               </div>
+              <div id="variable-details" class="collapse">
+                <hr>
+                <div class="control-group">
+                  <label class="control-label" for="variable-techunit">Technical Unit:</label>
+                  <div class="controls">
+                    <input type="text" id="variable-techunit" class="input-xlarge" disabled>
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label" for="variable-access">Access:</label>
+                  <div class="controls">
+                    <input type="text" id="variable-access" class="input-xlarge" disabled>
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label" for="variable-creationtime">Creation Time:</label>
+                  <div class="controls">
+                    <input type="text" id="variable-creationtime" class="input-xlarge" disabled>
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label" for="variable-semantics">Semantics:</label>
+                  <div class="controls">
+                    <input type="text" id="variable-semantics" class="input-xlarge" disabled>
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label" for="variable-comment">Comment:</label>
+                  <div class="controls">
+                    <textarea rows="3" id="variable-comment" class="input-xlarge" disabled></textarea>
+                  </div>
+                </div>
+              </div>
             </form>
           </div>
           <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" data-toggle="collapse" href="#variable-details"><i class="fa fa-search"></i> Details</button>
             <button id="save-variable" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
             <button id="refresh-variable" type="button" class="btn btn-default" title="refresh"><i class="fa fa-refresh"></i></button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

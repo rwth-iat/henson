@@ -540,19 +540,32 @@ Application.prototype.getVariable = function(path) {
  * @param data XML data from AJAX request to server
  */
 Application.prototype.drawVariable = function(data) {
+
+  var path = data.getElementsByTagName('path')[0].textContent;
   var v = [];
   
-  v['resourceLocator'] = data.getElementsByTagName('path')[0].textContent;
+  v['resourceLocator'] = path
   v['value'] = data.getElementsByTagName('value')[0].textContent.replace(/^\s*[\r\n]/gm, ''); // remove empty lines
   v['dataType'] = data.getElementsByTagName('value')[0].childNodes[0].nodeName;
   v['timestamp'] = data.getElementsByTagName('timestamp')[0].textContent;
   v['state'] = data.getElementsByTagName('state')[0].textContent;
+  
+  v['techUnit'] = Application.objCache.getTechUnit(path);
+  v['access'] = Application.objCache.getAccess(path);
+  v['creationTime'] = Application.objCache.getCreationTime(path);
+  v['semantics'] = Application.objCache.getSemantics(path);
+  v['comment'] = Application.objCache.getComment(path);
   
   $('#modal-variable #variable-resource-locator').val(v['resourceLocator']);
   $('#modal-variable #variable-value').val(v['value']);
   $('#modal-variable #variable-data-type option[value="'+v['dataType']+'"]').prop('selected', true);
   $('#modal-variable #variable-timestamp').val(v['timestamp']);
   $('#modal-variable #variable-quality-state option[value="'+v['state']+'"]').prop('selected', true);
+  $('#modal-variable #variable-techunit').val(v['techUnit']);
+  $('#modal-variable #variable-access').val(v['access']);
+  $('#modal-variable #variable-creationtime').val(v['creationTime']);
+  $('#modal-variable #variable-semantics').val(Application.prototype.semanticsBitsToChars(v['semantics']));
+  $('#modal-variable #variable-comment').val(v['comment']);
   
   $('#modal-variable .modal-title span').html(v['resourceLocator']);
   
@@ -812,8 +825,6 @@ Application.prototype.unlink = function(path, element) {
 
 /**
  * Shows load library modal.
- *
- * @param path Object path to delete
  */
 Application.prototype.drawLoadLibrary = function() {
   $('#modal-load-library #load-library-path').html('<option>/acplt</option>');
