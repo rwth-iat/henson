@@ -612,7 +612,7 @@ Application.prototype.drawInstantiable = function(data) {
     if (access.indexOf('instantiable') != -1) {
       var instantiableName = domains[i].getElementsByTagName('identifier')[0].textContent,
       separator = (access.indexOf('part') != -1 ? '.' : '/');
-      instantiables.push('<option>'+path+separator+instantiableName+'</option>');
+      instantiables.push('<option value="'+path+separator+instantiableName+'">'+instantiableName+'</option>');
     }
   }
   $('#modal-instantiate #instantiate-instantiable-path').empty().append(instantiables);
