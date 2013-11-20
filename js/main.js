@@ -122,6 +122,8 @@ $(document).ready(function() {
     // don't reload page on submit
     event.preventDefault();
     
+    Application.history.initServerAddress();
+    
     var conn = new ServerConnection($('#server-address').val());
     app = new Application(conn);
     

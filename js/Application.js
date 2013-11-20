@@ -153,6 +153,10 @@ Application.history = (function() {
       hashArray.shift();
       return ('/'+hashArray.join('/') || $('input#path').val());
     },
+    initServerAddress: function() {
+      var serverAddress = this.getHashArray()[0];
+      if (serverAddress != undefined) $('input#server-address').val(serverAddress);
+    },
     setHash: function(serverAddress, serverName, path) {
       if (serverAddress == null) serverAddress = this.getServerAddress();
       if (serverName == null) serverName = this.getServerName();
