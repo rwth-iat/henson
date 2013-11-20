@@ -122,8 +122,6 @@ $(document).ready(function() {
     // don't reload page on submit
     event.preventDefault();
     
-    Application.history.initServerAddress();
-    
     var conn = new ServerConnection($('#server-address').val());
     app = new Application(conn);
     
@@ -229,5 +227,6 @@ $(document).ready(function() {
   $('.zen-mode').zenForm({ trigger: '.zen-open', theme: 'light' });
   
   // fire it up
+  Application.history.initServerAddress();
   $('#button-submit').trigger('click');
 });
