@@ -56,6 +56,7 @@
           <button id="button-delete" class="btn" title="Delete" href="#modal-delete" data-toggle="modal"><i class="fa fa-trash-o"></i></button>
           <button id="button-rename" class="btn" title="Rename" href="#modal-rename" data-toggle="modal"><i class="fa fa-edit"></i></button>
           <button id="button-link" class="btn" title="Link" href="#modal-link" data-toggle="modal"><i class="fa fa-link"></i></button>
+          <button id="button-load-library" class="btn" title="Load Library" href="#modal-load-library" data-toggle="modal"><i class="fa fa-book"></i></button>
 
           <div class="pull-right">
             <label class="checkbox">
@@ -363,6 +364,38 @@
           </div>
           <div class="modal-footer">
             <button id="save-use" type="button" class="btn btn-primary" data-dismiss="modal">Use</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="modal-load-library" class="modal hide" role="dialog" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title"><i class="fa fa-book"></i> Load Library</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal">
+              <div class="control-group">
+                <label class="control-label" for="load-library-name">Library Name:</label>
+                <div class="controls">
+                  <input type="text" id="load-library-name" class="input-xlarge">
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="load-library-path">Libray Path:</label>
+                <div class="controls">
+                  <select id="load-library-path" class="input-xlarge"></select>
+                </div>
+              </div>
+            </form>
+            
+          </div>
+          <div class="modal-footer">
+            <button id="save-load-library" type="button" class="btn btn-primary" data-dismiss="modal">Load</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           </div>
         </div>

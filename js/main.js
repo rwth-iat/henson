@@ -82,6 +82,9 @@ var registerCustomEventListeners = function() {
   $('#view-table').off('unlink').on('unlink', function(e, data) {
     app.unlink(data.path, data.element);
   });
+  $('#view-table').off('loadLibrary').on('loadLibrary', function(e, data) {
+    app.createObject(data.path, data.factory);
+  });
   $('#view-table').off('refresh').on('refresh', function(e, path) {
     app.refreshNode($('#tree').dynatree('getTree').getNodeByKey(path));
   });
@@ -167,6 +170,10 @@ $(document).ready(function() {
   $('#button-link').off('click').click(function(event) {
     event.preventDefault();
     app.drawLink($("#tree").dynatree("getActiveNode").data.key);
+  });
+  $('#button-load-library').off('click').click(function(event) {
+    event.preventDefault();
+    app.drawLoadLibrary();
   });
   
   // search tree button in link / references modal

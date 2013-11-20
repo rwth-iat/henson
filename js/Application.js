@@ -759,6 +759,43 @@ Application.prototype.unlink = function(path, element) {
   this.serverConnection.unlink(path, element, this.drawResult, this.drawResult);
 },
 
+
+/**
+ * Shows load library modal.
+ *
+ * @param path Object path to delete
+ */
+Application.prototype.drawLoadLibrary = function() {
+  $('#modal-load-library #load-library-path').html('<option>/acplt</option>');
+  
+  if (Application.objCache.getName('/Libraries') == 'Libraries') {
+    $('#modal-load-library #load-library-path').append('<option>/Libraries</option>');
+  }
+
+  $('#modal-load-library #save-load-library').off('click').click(function() {
+    $('#view-table').trigger(
+      'loadLibrary',
+      {
+        path: $('#modal-load-library #load-library-path').val()+'/'+$('#modal-load-library #load-library-name').val(),
+        factory: '/acplt/ov/library'
+      });
+  });
+  
+  // show alert on link success
+  $(document).off('ajaxComplete').ajaxComplete(function(e, xhr, settings) {
+    if (settings.url.indexOf('link') != -1) {
+      xhr.success(function() {
+        if (type == 'domain') {
+          $('#view-table').trigger('refresh', path);
+        } else {
+          var pathArray = path.split(/[\/\.](?=[^\/.]*$)/); // find last '/' or '.' of the path
+          $('#view-table').trigger('refresh', pathArray[0]);
+        }
+      });
+    }
+  });
+},
+
 /**
  * Gets data for link by AJAX request and opens in modal on success.
  *
