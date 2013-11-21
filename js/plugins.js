@@ -49,7 +49,7 @@ var plugins = [
         +app.serverConnection.getServerAddress()
         +':'
         +app.serverConnection.getServerPort()
-        +'/hmi/?RefreshTime=1000&Host='
+        +'/hmi/?Host='
         +app.serverConnection.getServerAddress()
         +'&Server='
         +$('#server-name').val()
