@@ -31,12 +31,17 @@ var plugins = [
     refresh: true,
     destroy: true,
     checkConditions: function() {
-      var req = new XMLHttpRequest();
-      req.open('HEAD', 'http://'+app.serverConnection.getServerAddress()+':'+app.serverConnection.getServerPort()+'/hmi/', false);
+      var req1 = new XMLHttpRequest(),
+          req2 = new XMLHttpRequest();
+      req1.open('HEAD', 'http://'+app.serverConnection.getServerAddress()+':'+app.serverConnection.getServerPort()+'/hmi/', false);
+      req2.open('HEAD', window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/hmi/', false);
       try{
-        req.send(null);
-        if(req.status == 200){
-          return true;
+        req1.send(null);
+        req2.send(null);
+        if(req1.status == 200) {
+          return 1;
+        } else if (req2.status == 200) {
+          return 2;
         }
       } catch(e) {
         // do nothing
@@ -45,12 +50,14 @@ var plugins = [
       return false;
     },
     run: function(activeElementPath, data) {
-      var iFrame = '<iframe src="http://'
-        +app.serverConnection.getServerAddress()
+      var sl = this.checkConditions();
+      var iFrame = '<iframe src="'
+        +(sl == 1 ? 'http://' : window.location.protocol+'//')
+        +(sl == 1 ? app.serverConnection.getServerAddress() : window.location.hostname)
         +':'
-        +app.serverConnection.getServerPort()
+        +(sl == 1 ? app.serverConnection.getServerPort() : window.location.port)
         +'/hmi/?Host='
-        +app.serverConnection.getServerAddress()
+        +(sl == 1 ? app.serverConnection.getServerAddress() : window.location.hostname)
         +'&Server='
         +$('#server-name').val()
         +'&Sheet='
