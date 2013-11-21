@@ -56,7 +56,7 @@ var registerCustomEventListeners = function() {
   });
   $('#view-table').off('setPort').on('setPort', function(e, data) {
     app.serverConnection.setServerPort(data.port);
-    app.getRoot($('#tree').dynatree('getRoot'), data.serverName);
+    app.drawRoot($('#tree').dynatree('getRoot'), data.serverName);
   });
   $('#view-table').off('getVariable').on('getVariable', function(e, path) {
     app.getVariable(path);

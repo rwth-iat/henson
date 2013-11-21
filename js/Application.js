@@ -235,21 +235,12 @@ Application.prototype.setPort = function(data) {
 },
 
 /**
- * Gets data for root node by AJAX request and draws children on success.
- *
- * @param rootNode Dynatree root node
- */
-Application.prototype.getRoot = function(rootNode, serverName) {
-  this.serverConnection.getEP('/', 'OT_ANY', this.drawRoot, this.drawResult, rootNode, serverName);
-},
-
-/**
  * Draws root node children from AJAX data.
  *
- * @param data XML data from AJAX request to server
  * @param rootNode Dynatree root node
+ * @param serverName Name of the server
  */
-Application.prototype.drawRoot = function(data, rootNode, serverName) {
+Application.prototype.drawRoot = function(rootNode, serverName) {
   rootNode.data.key = 'server';
   
   rootNode.addChild({title: serverName, isLazy: true, key: '/', isFolder: true, type: 'domain', addClass: 'context-menu-domain'});
