@@ -39,11 +39,16 @@ var plugins = [
           return 1;
         } else {
           req.open('HEAD', window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/hmi/', false);
-          if (req.status == 200) return 2;
+          try {
+            req.send(null);
+            if (req.status == 200) return 2;
+          } catch(e) {
+            // do nothing
+          }
         }
       } catch(e) {
         // do nothing
-      };
+      }
       return false;
     },
     run: function(activeElementPath, data) {

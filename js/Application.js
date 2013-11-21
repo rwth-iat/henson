@@ -414,6 +414,7 @@ Application.prototype.drawData = function(dataDomain) {
           plugins[i].run(currentClass, dataDomain);
         } else {
           removeTab(plugins[i].name);
+          setActive('domain-view');
         }
       }
       
