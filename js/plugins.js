@@ -27,7 +27,7 @@ var plugins = [
     title: 'CSHMI',
     author: 'Christoph Sachsenhausen',
     activate: {baseClass: 'cshmi/Group'},
-    foreground: true,
+    foreground: false,
     refresh: true,
     destroy: true,
     checkConditions: function() {

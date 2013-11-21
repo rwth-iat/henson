@@ -235,13 +235,14 @@ Application.prototype.setPort = function(data) {
 },
 
 /**
- * Draws root node children from AJAX data.
+ * Draws root node children.
  *
  * @param rootNode Dynatree root node
  * @param serverName Name of the server
  */
 Application.prototype.drawRoot = function(rootNode, serverName) {
   rootNode.data.key = 'server';
+  rootNode.removeChildren();
   
   rootNode.addChild({title: serverName, isLazy: true, key: '/', isFolder: true, type: 'domain', addClass: 'context-menu-domain'});
 
@@ -411,7 +412,15 @@ Application.prototype.drawData = function(dataDomain) {
         }
         // execute plugin
         if (plugins[i].checkConditions()) {
-          plugins[i].run(currentClass, dataDomain);
+          // start plugin only when it gets to the foreground, else register onClick handler to start it
+          if (plugins[i].foreground) {
+            plugins[i].run(currentClass, dataDomain);
+          } else {
+            var currentPlugin = plugins[i];
+            $('.nav-tabs li a[href="#'+plugins[i].name+'"]').off('click').click(function() {
+              currentPlugin.run(currentClass, dataDomain);
+            });
+          }
         } else {
           removeTab(plugins[i].name);
           setActive('domain-view');
