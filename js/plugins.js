@@ -31,22 +31,19 @@ var plugins = [
     refresh: true,
     destroy: true,
     checkConditions: function() {
-      var req1 = new XMLHttpRequest(),
-          req2 = new XMLHttpRequest();
-      req1.open('HEAD', 'http://'+app.serverConnection.getServerAddress()+':'+app.serverConnection.getServerPort()+'/hmi/', false);
-      req2.open('HEAD', window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/hmi/', false);
+      var req = new XMLHttpRequest();
+      req.open('HEAD', 'http://'+app.serverConnection.getServerAddress()+':'+app.serverConnection.getServerPort()+'/hmi/', false);
       try{
-        req1.send(null);
-        req2.send(null);
-        if(req1.status == 200) {
+        req.send(null);
+        if(req.status == 200) {
           return 1;
-        } else if (req2.status == 200) {
-          return 2;
+        } else {
+          req.open('HEAD', window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/hmi/', false);
+          if (req.status == 200) return 2;
         }
       } catch(e) {
         // do nothing
       };
-      app.showAlert('/hmi/ not found on server', 'error');
       return false;
     },
     run: function(activeElementPath, data) {

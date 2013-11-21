@@ -410,7 +410,11 @@ Application.prototype.drawData = function(dataDomain) {
           $(window).resize();
         }
         // execute plugin
-        if (plugins[i].checkConditions()) plugins[i].run(currentClass, dataDomain);
+        if (plugins[i].checkConditions()) {
+          plugins[i].run(currentClass, dataDomain);
+        } else {
+          removeTab(plugins[i].name);
+        }
       }
       
     } else {
