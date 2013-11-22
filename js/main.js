@@ -47,7 +47,7 @@ var initializeSearchTree = function() {
   });
   var rootNode = $('#search-tree').dynatree('getRoot');
   rootNode.removeChildren();
-  app.getRoot(rootNode, $('#server-name').val());
+  app.drawRoot(rootNode, $('#server-name').val());
 }
 
 var registerCustomEventListeners = function() {
