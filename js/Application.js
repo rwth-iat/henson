@@ -1,6 +1,6 @@
 /**
  * HTML5 based single page interface for the ACPLT/KS server.
- * Offering similar functionality and replacing Megallan Pro.
+ * Offering similar functionality and replacing Magellan Pro.
  * Uses the Dynatree jQuery plugin and Twitter Bootstrap.
  * Main application class
  *
@@ -14,7 +14,9 @@ var Application = function(serverConnection) {
   this.serverConnection = serverConnection;
 }
 
-// TODO Docs
+/**
+ * Realizes an Object Cache
+ */
 Application.objCache = (function() {
   var cache = {
     name: 'root',
@@ -29,46 +31,111 @@ Application.objCache = (function() {
     children: []
   };
   return {
+    /**
+     * Gets the name of a node
+     *
+     * @param node String or node object
+     * @return Name of node
+     */ 
     getName: function(node) {
       if (typeof node !== 'string') return node.name;
       return this.findObj(this.splitPath(node)).name;
     },
+    /**
+     * Gets the type of a node
+     *
+     * @param node String or node object
+     * @return Type of node
+     */
     getType: function(node) {
       if (typeof node !== 'string') return node.type;
       return this.findObj(this.splitPath(node)).type;
     },
+    /**
+     * Gets the access of a node
+     *
+     * @param node String or node object
+     * @return Access of node
+     */
     getAccess: function(node) {
       if (typeof node !== 'string') return node.access;
       return this.findObj(this.splitPath(node)).access;
     },
+    /**
+     * Gets the class identifier of a node
+     *
+     * @param node String or node object
+     * @return Class identifier of node
+     */
     getClassId: function(node) {
       if (typeof node !== 'string') return node.classId;
       return this.findObj(this.splitPath(node)).classId;
     },
+    /**
+     * Gets the semantics of a node
+     *
+     * @param node String or node object
+     * @return semantics of node
+     */
     getSemantics: function(node) {
       if (typeof node !== 'string') return node.semantics;
       return this.findObj(this.splitPath(node)).semantics;
     },
+    /**
+     * Gets the creation time of a node
+     *
+     * @param node String or node object
+     * @return Creation time of node
+     */
     getCreationTime: function(node) {
       if (typeof node !== 'string') return node.creationTime;
       return this.findObj(this.splitPath(node)).creationTime;
     },
+    /**
+     * Gets the tech unit of a node
+     *
+     * @param node String or node object
+     * @return Tech unit of node
+     */
     getTechUnit: function(node) {
       if (typeof node !== 'string') return node.techUnit;
       return this.findObj(this.splitPath(node)).techUnit;
     },
+    /**
+     * Gets the comment of a node
+     *
+     * @param node String or node object
+     * @return Comment of node
+     */
     getComment: function(node) {
       if (typeof node !== 'string') return node.comment;
       return this.findObj(this.splitPath(node)).comment;
     },
+    /**
+     * Gets the parent object of a node
+     *
+     * @param node String or node object
+     * @return Parent Object of node
+     */
     getParent: function(node) {
       if (typeof node !== 'string') return node.parent;
       return (this.findObj(this.splitPath(node)).parent || cache);
     },
+    /**
+     * Gets the child nodes of a node
+     *
+     * @param node String or node object
+     * @return Array of child nodes
+     */
     getChildren: function(node) {
       if (typeof node !== 'string') return node.children;
       return this.findObj(this.splitPath(node)).children;
     },
+    /**
+     * Removes all child nodes of a node
+     *
+     * @param node String or node object
+     */
     removeChildren: function(node) {
       if (typeof node !== 'string') {
         node.children = [];
@@ -76,6 +143,19 @@ Application.objCache = (function() {
         this.findObj(this.splitPath(node)).children = [];
       }
     },
+    /**
+     * Adds a new child node to cache
+     *
+     * @param node Path to node or node object
+     * @param name Name of node
+     * @param type Type of node
+     * @param access Access of node
+     * @param classId Class Identifier of node
+     * @param semantics Semantics of node
+     * @param creationTime Creation Time of node
+     * @param techUnit Tech unit of node
+     * @param comment Comment of node
+     */
     addChild: function(node, name, type, access, classId, semantics, creationTime, techUnit, comment) {
       var obj;
       if (typeof node !== 'string') {
@@ -86,7 +166,8 @@ Application.objCache = (function() {
       var exists = false;
       var i = 0;
       while (!exists && i<obj.children.length) {
-        if (obj.children[i].name == name) {
+        if (obj.children[i].name == name) { 
+          // Consistency: child already exists, just update values
           exists = true;
           obj.children[i].type = type;
           obj.children[i].access = access;
@@ -98,6 +179,7 @@ Application.objCache = (function() {
         }
         i++;
       }
+      // Consistency: child does not exist, create new node
       if (!exists) obj.children.push({
         name: name, 
         type: type, 
@@ -111,10 +193,23 @@ Application.objCache = (function() {
         children: []
       });
     },
+    /**
+     * Splits path into array elements
+     *
+     * @param path Path to node
+     * @return Array path elements
+     */
     splitPath: function(path) {
       var pathElements = path.split(/[\/\.]+/);
       return pathElements.splice(1, pathElements.length-1);
     },
+    /**
+     * Find an object in cache by it's path array
+     *
+     * @param pathArray Array of path elements (returned by splitPath())
+     * @param obj Root object (Cache root if unset)
+     * @return Object in cache or cache root if not found
+     */
     findObj: function(pathArray, obj) {
       if (obj === undefined) obj = cache;
       var found = false;
@@ -132,40 +227,81 @@ Application.objCache = (function() {
       }
       return obj;
     },
+    /**
+     * Log complete cache to console
+     */
     log: function() {
       console.log(cache);
     }
   };
 })();
 
-// TODO Docs
+/**
+ * Realizes a history API to navigate and save states
+ */
 Application.history = (function() {
   return {
+    /**
+     * Gets server address from hash 
+     *
+     * @return Server address
+     */
     getServerAddress: function() {
       return ($('input#server-address').val() || this.getHashArray()[0]);
     },
+    /**
+     * Gets server name from hash 
+     *
+     * @return Server name
+     */
     getServerName: function() {
       return ($('input#server-name').val() || this.getHashArray()[1]);
     },
+    /**
+     * Gets path from hash 
+     *
+     * @return Path
+     */
     getPath: function() {
       var hashArray = this.getHashArray();
+      // remove first to elements from array
       hashArray.shift();
       hashArray.shift();
       return ('/'+hashArray.join('/') || $('input#path').val());
     },
+    /**
+     * Initially sets the correct server on startup
+     */
     initServerAddress: function() {
       var hashArray = this.getHashArray();
       if (hashArray.length != 0 && hashArray[0] != '') $('input#server-address').val(hashArray[0]);
     },
+    /**
+     * Set URL hash
+     *
+     * @param serverAddress Server address
+     * @param serverName Server name
+     * @param path Path
+     */
     setHash: function(serverAddress, serverName, path) {
       if (serverAddress == null) serverAddress = this.getServerAddress();
       if (serverName == null) serverName = this.getServerName();
       if (path == null) path = this.getPath();
       window.location.href = '#'+serverAddress+'/'+serverName+path;
     },
+    /**
+     * Gets complete hash from URL 
+     *
+     * @return Hash from URL
+     */
     getHash: function() {
       return window.location.hash.replace('#', '');
     },
+    /**
+     * Gets array of hash elements from URL 
+     *
+     * @return Array of hash elements from URL
+     */
     getHashArray: function() {
       return (this.getHash().split('/') || []);
     }
