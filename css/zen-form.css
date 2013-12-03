@@ -27,7 +27,7 @@ body {
 }
 
 .zen-forms-input-wrap {
-	max-width: 640px;
+	margin: 0px auto 0px 200px;
 	position: relative;
 	margin: 0 auto;
 }
