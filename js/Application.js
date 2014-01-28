@@ -1074,6 +1074,26 @@ Application.prototype.drawReferences = function(data) {
 },
 
 /**
+ * Gets data for logfile by AJAX request and shows in console on success.
+ */
+Application.prototype.getLogfile = function() {
+  this.serverConnection.getLogfile(this.drawLogfile, this.drawResult);
+},
+
+/**
+ * Shows log data from AJAX request.
+ *
+ * @param data XML data from AJAX request to server
+ */
+Application.prototype.drawLogfile = function(data) {
+  var entries = data.getElementsByTagName('entry');
+
+  for (var i=0; i<entries.length; i++) {
+    $('#console').append(entries[i].attributes[0].nodeValue+' - '+entries[i].textContent+'\r\n');
+  }
+},
+
+/**
  * Shows success / error alert.
  *
  * @param path Operating path

@@ -149,6 +149,8 @@ $(document).ready(function() {
       }
     });
     
+    app.getLogfile();
+    
     $(window).resize();
   });
   $('#button-refresh').off('click').click(function(event) {

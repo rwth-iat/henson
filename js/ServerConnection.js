@@ -301,6 +301,29 @@ ServerConnection.prototype.unlink = function(path, element, successCallback, fai
 },
 
 /**
+ * AJAX Request to the getLogfile function of the server. 
+ * Calls callback for success or failure.
+ *
+ * @param successCallback Callback on success
+ * @param failCallback Callback on failure
+ * @param callbackVar Additional callback parameter if needed
+ */
+ServerConnection.prototype.getLogfile = function(successCallback, failCallback) {
+  $.ajax({
+    url: this.getURL('', 'getLogfile'),
+    dataType: 'xml',
+    cache: this.cache,
+    timeout: this.timeout,
+    success: function(data) {
+      successCallback(data);
+    },
+    error: function(obj, textStatus, errorThrown) {
+      failCallback(textStatus, 'Get Logfile', obj.status, obj.statusText);
+    }
+  });
+},
+
+/**
  * Appends operating path to result data
  *
  * @param data Result data
