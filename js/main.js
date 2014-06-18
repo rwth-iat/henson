@@ -149,7 +149,8 @@ $(document).ready(function() {
       }
     });
     
-    app.getLogfile();
+    //do not load logfile, as this tab is not the active tab anymore
+    //app.getLogfile();
     
     $(window).resize();
   });
