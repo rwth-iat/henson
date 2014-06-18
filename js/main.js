@@ -57,6 +57,7 @@ var registerCustomEventListeners = function() {
   $('#view-table').off('setPort').on('setPort', function(e, data) {
     app.serverConnection.setServerPort(data.port);
     app.drawRoot($('#tree').dynatree('getRoot'), data.serverName);
+    app.getLogfile();
   });
   $('#view-table').off('getVariable').on('getVariable', function(e, path) {
     app.getVariable(path);
@@ -129,7 +130,7 @@ $(document).ready(function() {
     registerCustomEventListeners();
     registerContextMenuEventListeners();
 
-    app.getServer();
+    app.fillServerList();
     
     // save clicked path to global variable
     $('#view-table').off('saveClickedPath').on('saveClickedPath', function(e, path) {
@@ -148,9 +149,6 @@ $(document).ready(function() {
         $('.modal:visible button.btn-primary, .modal:visible button.btn-danger').click();
       }
     });
-    
-    //do not load logfile, as this tab is not the active tab anymore
-    //app.getLogfile();
     
     $(window).resize();
   });

@@ -321,7 +321,7 @@ Application.prototype.setActivePath = function(activePath) {
 /**
  * Gets list of all servers and draws selection modal on success.
  */
-Application.prototype.getServer = function() {
+Application.prototype.fillServerList = function() {
   this.serverConnection.getEP('/servers', 'OT_DOMAIN', this.drawServer, this.drawResult);
 },
 
@@ -353,7 +353,7 @@ Application.prototype.drawServer = function(data) {
  * @param serverName Name of the server
  */
 Application.prototype.getPort = function(serverName) {
-  this.serverConnection.getServer(serverName, this.setPort, this.drawResult);
+  this.serverConnection.resolveServerPort(serverName, this.setPort, this.drawResult);
 },
 
 /**
@@ -1088,6 +1088,7 @@ Application.prototype.getLogfile = function() {
 Application.prototype.drawLogfile = function(data) {
   var entries = data.getElementsByTagName('entry');
 
+  $('#console').empty();
   for (var i=0; i<entries.length; i++) {
     $('#console').append(entries[i].attributes[0].nodeValue+' - '+entries[i].textContent+'\r\n');
   }
@@ -1107,6 +1108,8 @@ Application.prototype.drawResult = function(path, textStatus, funcName, status, 
     Application.prototype.showAlert(funcName + ' ' + path, textStatus);
   } else if (textStatus == 'error') {
     Application.prototype.showAlert(funcName + ' ' + path + ' (' + status + ' ' + statusText + ') ', textStatus);
+  } else if (textStatus == 'timeout') {
+    Application.prototype.showAlert(funcName + ' ' + path + ' (' + statusText + ') ', 'info');
   } else {
     Application.prototype.showAlert('Something unexpected happened...', 'error');
   }

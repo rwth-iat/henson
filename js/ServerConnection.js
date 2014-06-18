@@ -72,7 +72,7 @@ ServerConnection.prototype.getURL = function(path, funcName) {
 /**
  * 
  */
-ServerConnection.prototype.getServer = function(serverName, successCallback, failCallback) {
+ServerConnection.prototype.resolveServerPort = function(serverName, successCallback, failCallback) {
   $.ajax({
     url: this.getURL(serverName, 'getServer'),
     dataType: 'xml',
