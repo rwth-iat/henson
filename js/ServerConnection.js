@@ -61,12 +61,27 @@ ServerConnection.prototype.setServerPort = function(port) {
 /**
  * Generate URL path.
  *
- * @param path Working path
+ * @param path Working path. Could be an Array for multiple requests
  * @param funcName Name of function to call
  * @return URL path
  */
 ServerConnection.prototype.getURL = function(path, funcName) {
-  return 'http://'+this.address+':'+this.port+'/'+funcName+'?'+(funcName == 'getServer' ? 'servername' : 'path')+'='+path+'&format=ksx';
+	var requestname = "";
+	if(funcName == 'getServer'){
+		requestname = 'servername='+path;
+	}else{
+		if(Object.prototype.toString.call(path) !== "[object Array]"){
+			//force a string input in Array
+			path = Array(path);
+		}
+		for(var iterator = 0; iterator < path.length;iterator++){
+			if(iterator>0){
+				requestname += "&";
+			}
+			requestname += "path["+iterator+"]=" +path[iterator];
+		}
+	}
+	return 'http://'+this.address+':'+this.port+'/'+funcName+'?'+requestname+'&format=ksx';
 },
 
 /**
@@ -120,7 +135,7 @@ ServerConnection.prototype.getEP = function(path, requestType, successCallback, 
  * AJAX Request to the getVar function of the server. 
  * Calls callback for success or failure.
  *
- * @param path Variable path
+ * @param path Variable path. Could be an Array for multiple requests
  * @param successCallback Callback on success
  * @param failCallback Callback on failure
  * @param callbackVar Additional callback parameter if needed
