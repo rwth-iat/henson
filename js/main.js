@@ -59,6 +59,9 @@ var registerCustomEventListeners = function() {
     app.drawRoot($('#tree').dynatree('getRoot'), data.serverName);
     app.getLogfile();
   });
+  $('#view-table').off('updateVariable').on('updateVariable', function(e, path) {
+    app.updateVariable(path);
+  });
   $('#view-table').off('getVariable').on('getVariable', function(e, path) {
     app.getVariable(path);
   });
@@ -97,6 +100,9 @@ var registerCustomEventListeners = function() {
 var registerContextMenuEventListeners = function() {
   $('.dropdown-menu li a[href="#modal-instantiate"]').off('click').click(function() {
     app.getInstantiate(clickedPath);
+  });
+  $('.dropdown-menu li a[href="#modal-move"]').off('click').click(function() {
+    app.drawMove(clickedPath);
   });
   $('.dropdown-menu li a[href="#modal-delete"]').off('click').click(function() {
     app.drawDelete(clickedPath);
@@ -148,10 +154,11 @@ $(document).ready(function() {
       if (e.keyCode == 13 && $('.modal:visible').length > 0 && $('.modal:visible textarea:focus').length == 0) {
         $('.modal:visible button.btn-primary, .modal:visible button.btn-danger').click();
       }
-    });
+    });    
     
     $(window).resize();
   });
+
   $('#button-refresh').off('click').click(function(event) {
     event.preventDefault();
     app.refreshNode($("#tree").dynatree("getActiveNode"));
@@ -211,6 +218,15 @@ $(document).ready(function() {
       timer = window.setInterval(function() {
         app.refreshNode($('#tree').dynatree('getActiveNode'));
       }, parseInt($('#refresh-timeout').val())*1000);
+    }  
+  });
+  // Set value refresh timeout
+  $('#value-refresh-timeout, #value-auto-refresh').off('change').change(function() {
+    window.clearInterval(timer);
+    if ($('#value-auto-refresh').is(':checked')) {
+      timer = window.setInterval(function() {
+        app.updateVarValues(Application.history.getPath());
+      }, parseInt($('#value-refresh-timeout').val())*1000);
     }
   });
   
@@ -247,4 +263,14 @@ $(document).ready(function() {
   // fire it up
   Application.history.initServerAddress();
   $('#button-submit').trigger('click');
+
+  // open dropdown menu if focused
+  $("#modal-instantiate #instantiate-class-path").on("focus",function() {
+    $("#modal-instantiate #instantiate-class-path").click();
+  });
 });
+
+window.onload = function () {
+  console.log('Dokument geladen');
+  $('#value-auto-refresh').click();
+}
