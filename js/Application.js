@@ -787,12 +787,15 @@ Application.history = (function() {
       $("#domain-view>table>tbody>tr:last-child").append(
         '<td><i class="' + l["icon"] + '"></i></td>'
       );
+      var id = decodeURI(l["identifier"]);
+      if (id[0]=='.')
+        id = id.substring(1,)
       $("#domain-view>table>tbody>tr:last-child").append(
-        "<td class='variable-identifier'>" + decodeURI(l["identifier"]) + "</td>"
+      "<td class='variable-identifier'><button tabIndes='-1'>" + id+ "</button></td>"
       );
       if(l["access"].includes('write')){
         $("#domain-view>table>tbody>tr:last-child").append(
-          '<td> <input id="' + Application.objCache.getName(path) +l["identifier"] + '" name="' + l["identifier"]+'" class="varvalinp" type="text" value=""> </td>');
+          '<td> <input id="' + Application.objCache.getName(path) +l["identifier"] + '" name="' + l["identifier"]+'" class="varvalinp" type="text" value="" tabIndex="1" > </td>');
         }
       else{
         $("#domain-view>table>tbody>tr:last-child").append(
