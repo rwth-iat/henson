@@ -1,4 +1,4 @@
-var app, timer, clickedPath;
+var app, timer, clickedPath, domainViewTable;
 
 var initializeTree = function() {
   $('#tree').dynatree({
@@ -268,9 +268,14 @@ $(document).ready(function() {
   $("#modal-instantiate #instantiate-class-path").on("focus",function() {
     $("#modal-instantiate #instantiate-class-path").click();
   });
+
+
+  $('#view-table').DataTable();
 });
 
 window.onload = function () {
   console.log('Dokument geladen');
   $('#value-auto-refresh').click();
 }
+
+

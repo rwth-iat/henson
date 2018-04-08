@@ -22,8 +22,12 @@
   <link rel="stylesheet" href="css/zen-form.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/Application.css">
-  <script src="js/vendor/modernizr-2.6.2.min.js"></script>    
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jqc-1.12.3/dt-1.10.16/b-1.5.1/sl-1.2.5/datatables.min.css"/>
+  <!-- <link rel="stylesheet" type="text/css" href="Editor-1.7.3/css/editor.dataTables.css"> -->
+ 
+  <script src="js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
+
 <body>
 
   <div class="navbar">
@@ -133,6 +137,24 @@
             <span class="add-on">s</span>
           </div>
         </div>
+
+        <div class="pull-right">
+          <button type="button" id="quickrun" class="quickrun" onclick="quick_run1();">Upload</button>
+        </div>
+        <div class="pull-right">
+          <button type="button" id="quickrun" class="quickrun" onclick="quick_run2();">Download</button>
+        </div>
+        <div class="pull-right">
+          <button type="button" id="quickrun" class="quickrun" onclick="quick_run3();">Transport</button>
+        </div>
+        <div class="pull-right">
+          <button type="button" id="quickrun" class="quickrun" onclick="quick_run4();">LoadLibs</button>
+        </div>
+        <div class="pull-right">
+          <button type="button" id="quickrun" class="quickrun" onclick="quick_run5();">Test</button>
+        </div>
+
+
       </form>
     </div>
 
@@ -195,6 +217,7 @@
                     <th>Semantics</th>
                     <th>Creation Time</th>
                     <th>Comment</th>
+                    <th>Path</th>
                   </tr>
                 </thead>
                 <tbody></tbody>
@@ -616,7 +639,7 @@
     </div>
   </div>
 
-  <script src="js/vendor/jquery-1.10.0.min.js"></script>
+  <script src="js/vendor/jquery-1.10.2.min.js"></script>
   <script src="js/vendor/jquery-ui-1.10.3.min.js"></script>
   <script src="js/vendor/bootstrap.min.js"></script>
   <script src="js/jquery.dynatree.js"></script>
@@ -625,9 +648,16 @@
   <script src="js/Application.js"></script>
   <script src="js/plugins.js"></script>
   <script src="js/main.js"></script>
+
+  <!-- <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jqc-1.12.3/dt-1.10.16/b-1.5.1/sl-1.2.5/datatables.min.js"></script> -->
+  <!-- <script type="text/javascript" src="Editor-1.7.3/js/dataTables.editor.js"></script> -->
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
   <!-- <script src="js/jquery.hotkeys.js"></script> -->
   <script src="js/short_cuts.js"></script>
   <!-- <script src="js/jquery-1.4.2.js"></script> -->
-  
+
+  <script src="js/debug/quick_run.js"></script>
+
 </body>
+
 </html>

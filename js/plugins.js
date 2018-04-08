@@ -12,7 +12,8 @@ var plugins = [
     },
     run: function(activeElementPath, data) { // custom plugin code, DOM elements are attachable to the created ID: $('#'+this.name).append(newElement);
       // empty the table
-      $('#domain-view>table>tbody').empty();
+      t = $('#view-table').DataTable();
+      t.rows().remove().draw();
       path = data.getElementsByTagName('path')[0].textContent;
       // empty cache at this path
       Application.objCache.removeChildren(path);
@@ -20,6 +21,30 @@ var plugins = [
       app.appendRows(data.getElementsByTagName('VariableEngProps'), path, 'variable');
       app.appendRows(data.getElementsByTagName('LinkEngProps'), path, 'link');
       app.appendRows(data.getElementsByTagName('DomainEngProps'), path, 'domain');
+    }
+  },
+  {
+    name: 'compact-view', // internal name for plugin, also creates a DOM element with this ID
+    title: 'Compact View', // title of the tab
+    author: 'Zolboo Erdenebayar', // your name here
+    activate: {always: true}, // activate condition, implemented: {exactClass: 'partial/path/of/class'}, {baseClass: 'partial/name/of/baseclass' or {always: true}
+    foreground: false, // switch plugin to foreground on activation?
+    refresh: true, // reload data on refresh?
+    destroy: false, // should the plugin be destroyed if the activation condition does not match anymore?
+    checkConditions: function() { // startup function that checks conditions before running the plugin
+      return true;
+    },
+    run: function(activeElementPath, data) { // custom plugin code, DOM elements are attachable to the created ID: $('#'+this.name).append(newElement);
+      // empty the table
+      $('#compact-view>table>tbody').empty();
+      $('#compact-view.tab')
+      path = data.getElementsByTagName('path')[0].textContent;
+      // empty cache at this path
+      Application.objCache.removeChildren(path);
+      // append elements to table
+      app.appendElement(data.getElementsByTagName('VariableEngProps'), path, 'variable');
+      app.appendElement(data.getElementsByTagName('LinkEngProps'), path, 'link');
+      app.appendElement(data.getElementsByTagName('DomainEngProps'), path, 'domain');
     }
   },
   {

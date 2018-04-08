@@ -134,7 +134,7 @@ Application.objCache = (function() {
       return this.findObj(this.splitPath(node)).children;
     },
     /**
-     * Removes all child nodes of a node
+    * Removes all child nodes of a node
      *
      * @param node String or node object
      */
@@ -731,7 +731,8 @@ Application.history = (function() {
           (path == "/vendor" ? "/" : seperator) +
           encodeURI(l["identifier"]);
         l["identifier"] =
-          (path == "/vendor" ? "" : seperator) + l["identifier"];
+        list[i].getElementsByTagName("identifier")[0].textContent;
+          // (path == "/vendor" ? "" : seperator) + l["identifier"];
         l["icon"] = "fa fa-file-text";
         l["techUnit"] = list[i].getElementsByTagName("techunit")[0].textContent;
       } else if (type == "link") {
@@ -751,7 +752,8 @@ Application.history = (function() {
           (path == "/vendor" ? "/" : seperator) +
           encodeURI(l["identifier"]);
         l["identifier"] =
-          (path == "/vendor" ? "" : seperator) + l["identifier"];
+        list[i].getElementsByTagName("identifier")[0].textContent,
+          // (path == "/vendor" ? "" : seperator) + l["identifier"];
         l["icon"] = "fa fa-link";
         l["techUnit"] = undefined;
       } else {
@@ -773,86 +775,88 @@ Application.history = (function() {
         l["comment"]
       );
 
-      // add data to table
-      $("#domain-view>table>tbody").append(
-        '<tr data-toggle="context" data-target="#context-menu-' +
-          type +
-          '" data-path="' +
-          l["path"] +
-          '" data-type="' +
-          type +
-          '"></tr>'
-      );
 
-      $("#domain-view>table>tbody>tr:last-child").append(
-        '<td><i class="' + l["icon"] + '"></i></td>'
-      );
-      var id = decodeURI(l["identifier"]);
-      if (id[0]=='.')
-        id = id.substring(1,)
-      $("#domain-view>table>tbody>tr:last-child").append(
-      "<td class='variable-identifier'><button tabIndes='-1'>" + id+ "</button></td>"
-      );
+      var identButton = "<td class='variable-identifier'><button tabIndes='-1'>" + l["identifier"]+ "</button></td>"
+      var value;
       if(l["access"].includes('write')){
         $("#domain-view>table>tbody>tr:last-child").append(
-          '<td> <input id="' + Application.objCache.getName(path) +l["identifier"] + '" name="' + l["identifier"]+'" class="varvalinp" type="text" value="" tabIndex="1" > </td>');
+          value = '<td> <input id="' + l["path"] + '" name="' + l["identifier"]+'" class="varvalinp" type="text" value="" tabIndex="1" > </td>');
         }
       else{
         $("#domain-view>table>tbody>tr:last-child").append(
-        '<td> <p id="' + Application.objCache.getName(path) +l["identifier"] + '" name="' + l["identifier"]+'" class="varval" type="text" value=""> </p> </td>')
+         value = '<td> <p id="' + l["path"] + '" name="' + l["identifier"]+'" class="varval" type="text" value=""> </p> </td>')
       };
-      $("#domain-view>table>tbody>tr:last-child").append(
-        "<td>" + l["type"] + "</td>"
-      );
-      $("#domain-view>table>tbody>tr:last-child").append(
-        "<td>" + l["class"] + "</td>"
-      );
-      $("#domain-view>table>tbody>tr:last-child").append(
-        "<td>" + l["access"] + "</td>"
-      );
-      $("#domain-view>table>tbody>tr:last-child").append(
-        "<td>" +
-          Application.prototype.semanticsBitsToChars(l["semantics"]) +
-          "</td>"
-      );
-      $("#domain-view>table>tbody>tr:last-child").append(
-        "<td>" + l["creation"] + "</td>"
-      );
-      $("#domain-view>table>tbody>tr:last-child").append(
-        "<td>" + l["comment"] + "</td>"
-      );
+ 
+
+      var t = $('#view-table').DataTable();
+         t.row.add( [
+            '<td><i class="' + l["icon"] + '"></i></td>',
+            identButton,
+            value,
+            l["type"],
+            l["class"],
+            l["access"],
+           Application.prototype.semanticsBitsToChars(l["semantics"]),
+            l["creation"],
+            l["comment"],
+            l["path"]
+        ] ).draw( false );
+ 
+
+
+      // add data to table
+    //   $("#domain-view>table>tbody").append(
+    //     '<tr data-toggle="context" data-target="#context-menu-' +
+    //       type +
+    //       '" data-path="' +
+    //       l["path"] +
+    //       '" data-type="' +
+    //       type +
+    //       '"></tr>'
+    //   );
+
+    //   $("#domain-view>table>tbody>tr:last-child").append(
+    //     '<td><i class="' + l["icon"] + '"></i></td>'
+    //   );
+    //   var id = decodeURI(l["identifier"]);
+    //   if (id[0]=='.')
+    //     id = id.substring(1,)
+    //   $("#domain-view>table>tbody>tr:last-child").append(
+    //   "<td class='variable-identifier'><button tabIndes='-1'>" + id+ "</button></td>"
+    //   );
+    //   
     }
 
-    // register event listeners when clicking on row
-    $("#domain-view>table>tbody>tr>td.variable-identifier")
-      .off("mousedown")
-      .mousedown(function(e) {
-        var rowtype = $(this.parentNode).attr("data-type");
-        var rowpath = $(this.parentNode).attr("data-path");
-        // left click
-        if (e.which == 1) {
-          if (rowtype == "variable") {
-            // open variable modal
-            $("#view-table").trigger("getVariable", rowpath);
-            // $("#view-table").trigger("updateVariable", rowpath);
-          } else {
-            Application.prototype.expandNodes(rowpath);
-          }
-          // right click
-        } else if (e.which == 3) {
-          $("#view-table").trigger("saveClickedPath", rowpath);
-        }
-      });
+    // // register event listeners when clicking on row
+    // $("#domain-view>table>tbody>tr>td.variable-identifier")
+    //   .off("mousedown")
+    //   .mousedown(function(e) {
+    //     var rowtype = $(this.parentNode).attr("data-type");
+    //     var rowpath = $(this.parentNode).attr("data-path");
+    //     // left click
+    //     if (e.which == 1) {
+    //       if (rowtype == "variable") {
+    //         // open variable modal
+    //         $("#view-table").trigger("getVariable", rowpath);
+    //         // $("#view-table").trigger("updateVariable", rowpath);
+    //       } else {
+    //         Application.prototype.expandNodes(rowpath);
+    //       }
+    //       // right click
+    //     } else if (e.which == 3) {
+    //       $("#view-table").trigger("saveClickedPath", rowpath);
+    //     }
+    //   });
 
-      $(".varvalinp").keyup(function (event) {
-        if (event.keyCode == 13) {
-            $(this).trigger("setVariable", 
-            {
-              path: Application.history.getPath()+ event.currentTarget.name, 
-              newValue: event.currentTarget.value
-            });
-        }
-      });
+    //   $(".varvalinp").keyup(function (event) {
+    //     if (event.keyCode == 13) {
+    //         $(this).trigger("setVariable", 
+    //         {
+    //           path: Application.history.getPath()+ event.currentTarget.name, 
+    //           newValue: event.currentTarget.value
+    //         });
+    //     }
+    //   });
     //update looper
   }),
 
@@ -865,29 +869,44 @@ Application.history = (function() {
     var paths = [];
     var variables = [];
     var children = Application.objCache.getChildren(path);
+    var seperator = (path=="/vendor") ? '/':'.';
     children.forEach(function(el, i){
-      if (el.type=='variable'){
-        paths.push(path + '.'+ el.name);
-        variables.push(el.name);
+      if (el.type=='variable' || el.type=='link'){
+        paths.push(path + seperator+ el.name);
+        // Applicvariables.push(el.name);
       }
     });
-    this.serverConnection.getVar(paths, this.showVarValues, this.drawResult, children);
+    this.serverConnection.getVar(paths, this.showVarValues, this.updateVarValuesFailure, children);
   }),
 
-  //   /**
-  //  * Gets data for domain by AJAX request.
-  //  *
-  //  * @param data Query path to server
-  //  */
-  // (Application.prototype.getVars = function(data, path) {
-  //   var listVariable = data.getElementsByTagName("VariableEngProps");
-  //   var paths = []
-  //   for (var i = 0; i < listVariable.length; i++) {
-  //     paths[i] = path + '.'+ listVariable[i].getElementsByTagName("identifier")[0]
-  //       .textContent;
-  //   }
-  //   app.serverConnection.getVar(paths, app.showVarValues, app.drawResult);
-  // }),
+    /**!!!
+   *
+   *
+   * @param path Variable path to open
+   */
+  (Application.prototype.updateVarValuesFailure = function(paths, textStatus, title, objstatus, objstatusText, results) {
+    for (var i = 0; i < paths.length; i++){
+
+      path = paths[i];
+      var v = [];
+      
+      if(results[i].tagName == "failure")
+        v["value"] = "ERROR: "+results[i].textContent
+      else
+        v["value"] = results[i].getElementsByTagName("value")[0].textContent
+
+      // $("#domain-view>table>tbody>tr>td>input").val(v["value"]);
+      var inp = document.getElementById(path);
+      if (inp == document.activeElement){
+          continue;
+        }
+      if(inp==null || inp.tagName=='INPUT')
+        $(inp).val(v["value"]);
+      else
+        inp.textContent = v["value"];
+      }
+    
+  }),
 
   /**
    *
@@ -908,9 +927,8 @@ Application.history = (function() {
       .textContent.replace(/\n+$/g, ""); // remove empty line at end
     
       // $("#domain-view>table>tbody>tr>td>input").val(v["value"]);
-      var tmp = path.split("/");
-      var inp = document.getElementById(tmp[tmp.length-1]);
-      if (inp == document.activeElement){
+      var inp = document.getElementById(path);
+      if (inp==null || inp == document.activeElement){
           continue;
         }
       if(inp.tagName=='INPUT')
@@ -919,38 +937,8 @@ Application.history = (function() {
         inp.textContent = v["value"];
       }
     }),
-  /**
-   *
-   *
-   * @param path Variable path to open
-   */
-  (Application.prototype.updateVariable = function(path) {
-    this.serverConnection.getEP(path, "OT_ANY", this.getVars, this.drawResult);
-  }),
-  /**
-   * Open variable modal and shows data from AJAX request.
-   *
-   * @param data XML data from AJAX request to server
-   */
-  (Application.prototype.showVariable = function(data) {
-    var path = data.getElementsByTagName("path")[0].textContent;
-    var v = [];
 
-    v["value"] = data
-      .getElementsByTagName("value")[0]
-      .textContent.replace(/\n+$/g, ""); // remove empty line at end
-
-    // $("#domain-view>table>tbody>tr>td>input").val(v["value"]);
-    tmp = path.split(".");
-    inp = document.getElementById('.'+tmp[tmp.length-1]);
-      if (inp == document.activeElement){
-        logMsg("input is active");
-        return;
-      }
-    $(inp).val(v["value"]);
-    logMsg("var");
-  }),
-  /**
+ /**
    * Gets data for variable by AJAX request and opens in modal on success.
    *
    * @param path Variable path to open

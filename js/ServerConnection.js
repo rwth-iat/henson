@@ -150,7 +150,7 @@ ServerConnection.prototype.getVar = function(path, successCallback, failCallback
       successCallback(ServerConnection.prototype.appendPath(data, path), callbackVar);
     },
     error: function(obj, textStatus, errorThrown) {
-      failCallback(path, textStatus, 'Get Variable', obj.status, obj.statusText);
+      failCallback(path, textStatus, 'Get Variable', obj.status, obj.statusText, obj.responseXML.getElementsByTagName("getvar")[0].children);
     }
   });
 },
