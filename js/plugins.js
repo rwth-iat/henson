@@ -1,5 +1,5 @@
 var plugins = [{
-    name: 'domain-view', // internal name for plugin, also creates a DOM element with this ID
+    name: 'domain-view', // internal name for plugin, also creates a DOM element with ID
     title: 'Domain View', // title of the tab
     author: 'Christoph Sachsenhausen', // your name here
     activate: {
@@ -8,47 +8,21 @@ var plugins = [{
     foreground: true, // switch plugin to foreground on activation?
     refresh: true, // reload data on refresh?
     destroy: false, // should the plugin be destroyed if the activation condition does not match anymore?
-    checkConditions: function () { // startup function that checks conditions before running the plugin
-      return true;
-    },
-    run: function (activeElementPath, data) { // custom plugin code, DOM elements are attachable to the created ID: $('#'+this.name).append(newElement);
-      // empty the table
-      t = $('#view-table').DataTable();
-      t.rows().remove().draw();
-      path = data.getElementsByTagName('path')[0].textContent;
-      // empty cache at this path
-      Application.objCache.removeChildren(path);
-      // append elements to table
-      app.appendRows(data.getElementsByTagName('VariableEngProps'), path, 'variable');
-      app.appendRows(data.getElementsByTagName('LinkEngProps'), path, 'link');
-      app.appendRows(data.getElementsByTagName('DomainEngProps'), path, 'domain');
-    }
+    checkConditions: domainViewPlugIn.checkConditions,
+    run: domainViewPlugIn.run
   },
   {
-    name: 'compact-view', // internal name for plugin, also creates a DOM element with this ID
+    name: 'compact-view', // internal name for plugin, also creates a DOM element with ID
     title: 'Compact View', // title of the tab
-    author: 'Zolboo Erdenebayar', // your name here
-    activate: {
+    author : 'Zolboo Erdenebayar', // your name here
+    activate : {
       always: true
     }, // activate condition, implemented: {exactClass: 'partial/path/of/class'}, {baseClass: 'partial/name/of/baseclass' or {always: true}
-    foreground: false, // switch plugin to foreground on activation?
-    refresh: true, // reload data on refresh?
-    destroy: false, // should the plugin be destroyed if the activation condition does not match anymore?
-    checkConditions: function () { // startup function that checks conditions before running the plugin
-      return true;
-    },
-    run: function (activeElementPath, data) { // custom plugin code, DOM elements are attachable to the created ID: $('#'+this.name).append(newElement);
-      // empty the table
-      $('#compact-view>table>tbody').empty();
-      $('#compact-view.tab')
-      path = data.getElementsByTagName('path')[0].textContent;
-      // empty cache at this path
-      Application.objCache.removeChildren(path);
-      // append elements to table
-      app.appendElement(data.getElementsByTagName('VariableEngProps'), path, 'variable');
-      app.appendElement(data.getElementsByTagName('LinkEngProps'), path, 'link');
-      app.appendElement(data.getElementsByTagName('DomainEngProps'), path, 'domain');
-    }
+    foreground : false, // switch plugin to foreground on activation?
+    refresh : true, // reload data on refresh?
+    destroy : false, // should the plugin be destroyed if the activation condition does not match anymore?
+    checkConditions: compactViewPlugIn.checkConditions,
+    run: compactViewPlugIn.run
   },
   {
     name: 'cshmi-view',
@@ -60,43 +34,8 @@ var plugins = [{
     foreground: true,
     refresh: true,
     destroy: true,
-    checkConditions: function () {
-      var req = new XMLHttpRequest();
-      req.open('HEAD', 'http://' + app.serverConnection.getServerAddress() + ':' + app.serverConnection.getServerPort() + '/hmi/', false);
-      try {
-        req.send(null);
-        if (req.status == 200) {
-          return 1;
-        } else {
-          req.open('HEAD', window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/hmi/', false);
-          try {
-            req.send(null);
-            if (req.status == 200) return 2;
-          } catch (e) {
-            // do nothing
-          }
-        }
-      } catch (e) {
-        // do nothing
-      }
-      return false;
-    },
-    run: function (activeElementPath, data) {
-      var sl = this.checkConditions();
-      var iFrame = '<iframe src="' +
-        (sl == 1 ? 'http://' : window.location.protocol + '//') +
-        (sl == 1 ? app.serverConnection.getServerAddress() : window.location.hostname) +
-        ':' +
-        (sl == 1 ? app.serverConnection.getServerPort() : window.location.port) +
-        '/hmi/?Host=' +
-        (sl == 1 ? app.serverConnection.getServerAddress() : window.location.hostname) +
-        '&Server=' +
-        $('#server-name').val() +
-        '&Sheet=' +
-        activeElementPath +
-        '" style="border: 0; width: 100%; height: 100%; margin: -1px; padding: 0;"></iframe>';
-      $('#' + this.name).append(iFrame);
-    }
+    checkConditions: cshmiViewPlugIn.checkConditions,
+    run: cshmiViewPlugIn.run
   },
   {
     name: 'engineering-view',
@@ -108,44 +47,7 @@ var plugins = [{
     foreground: false,
     refresh: true,
     destroy: true,
-    checkConditions: function () {
-      var req = new XMLHttpRequest();
-      req.open('HEAD', 'http://' + app.serverConnection.getServerAddress() + ':' + app.serverConnection.getServerPort() + '/hmi/', false);
-      try {
-        req.send(null);
-        if (req.status == 200) {
-          return 1;
-        } else {
-          //fixme: had to check if EngineeringTemplate is loaded, but the target path will change in the near future
-          req.open('HEAD', window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/hmi/', false);
-          try {
-            req.send(null);
-            if (req.status == 200) return 2;
-          } catch (e) {
-            // do nothing
-          }
-        }
-      } catch (e) {
-        // do nothing
-      }
-      return false;
-    },
-    run: function (activeElementPath, data) {
-      var sl = this.checkConditions();
-      var iFrame = '<iframe src="' +
-        (sl == 1 ? 'http://' : window.location.protocol + '//') +
-        (sl == 1 ? app.serverConnection.getServerAddress() : window.location.hostname) +
-        ':' +
-        (sl == 1 ? app.serverConnection.getServerPort() : window.location.port) +
-        '/hmi/?Host=' +
-        (sl == 1 ? app.serverConnection.getServerAddress() : window.location.hostname) +
-        '&Server=' +
-        $('#server-name').val() +
-        '&Sheet=/TechUnits/cshmi/Templates/Engineering/Domainv1' +
-        '&FBReference=' +
-        activeElementPath +
-        '" style="border: 0; width: 100%; height: 100%; margin: -1px; padding: 0;"></iframe>';
-      $('#' + this.name).empty().append(iFrame);
-    }
+    checkConditions: engineeringViewPlugIn.checkConditions,
+    run: engineeringViewPlugIn.run
   }
 ];
