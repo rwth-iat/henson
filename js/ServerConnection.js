@@ -165,7 +165,7 @@ ServerConnection.prototype.getServerAddress = function () {
    * @param successCallback Callback on success
    * @param failCallback Callback on failure
    */
-  ServerConnection.prototype.setVar = function (path, newValue, newVartype, successCallback, failCallback) {
+  ServerConnection.prototype.setVar = function (path, newValue, newVartype, successCallback, failCallback, callbackVar) {
     $.ajax({
       url: this.getURL(path, 'setVar'),
       data: {
@@ -176,7 +176,7 @@ ServerConnection.prototype.getServerAddress = function () {
       cache: this.cache,
       timeout: this.timeout,
       success: function (data, textStatus) {
-        successCallback(path, textStatus, 'Set Variable');
+        successCallback(path, textStatus, 'Set Variable', callbackVar);
       },
       error: function (obj, textStatus, errorThrown) {
         failCallback(path, textStatus, 'Set Variable', obj.status, obj.statusText);

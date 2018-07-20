@@ -624,14 +624,15 @@ Application.history = (function () {
     ) {
       // load the plugin only if it does not exist yet OR it exists in DOM and is allowed to refresh?
       var pluginExists = $("#" + plugins[i].name).length > 0 ? true : false;
-
+      if(!pluginExists){
+        // // remove old tab
+        // removeTab(plugins[i].name);
+        // add new tab
+        addTab(plugins[i].name, plugins[i].title);
+      };
       if (!pluginExists || (pluginExists && plugins[i].refresh)) {
         if (plugins[i].name != "domain-view") {
-          // remove old tab
-          removeTab(plugins[i].name);
 
-          // add new tab
-          addTab(plugins[i].name, plugins[i].title);
 
           // set to foreground
           if (plugins[i].foreground) {
@@ -647,7 +648,7 @@ Application.history = (function () {
           if (plugins[i].foreground) {
             plugins[i].run(currentClass, dataDomain);
           } else {
-            var currentPlugin = plugins[i];
+            let currentPlugin = plugins[i];
             $('.nav-tabs li a[href="#' + plugins[i].name + '"]')
               .off("click")
               .click(function () {
@@ -678,262 +679,6 @@ Application.history = (function () {
       removeTab(name);
       setActive("domain-view");
     });
-}),
-/**
- * Adds rows to main view table and registers event handlers (click on row)
- *
- * @param list List of data items
- * @param type Data Type: variable, link or domain
- */
-(Application.prototype.appendRows = function (list, path, type) {
-  // loop through list and append items as rows
-  for (var i = 0; i < list.length; i++) {
-    var l = [];
-    l["identifier"] = list[i].getElementsByTagName(
-      "identifier"
-    )[0].textContent;
-    l["comment"] = list[i].getElementsByTagName("comment")[0].textContent;
-    l["access"] = list[i].getElementsByTagName("access")[0].textContent;
-    var seperator = l["access"].indexOf("part") == -1 ? "/" : ".";
-
-    var d = new Date(
-      list[i].getElementsByTagName("creationtime")[0].textContent
-    );
-    l["creation"] = d.toLocaleString("de-DE", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit"
-    });
-
-    l["semantics"] = list[i].getElementsByTagName("semantics")[0].textContent;
-
-    // Type specific values, pretty output, icons
-    if (type == "domain") {
-      l["type"] = "Domain";
-      l["class"] = list[i].getElementsByTagName(
-        "classIdentifier"
-      )[0].textContent;
-      l["path"] =
-        path +
-        (path == "/" || path == "/vendor" ? "" : seperator) +
-        encodeURI(l["identifier"]);
-      l["icon"] = "fa fa-folder";
-      l["techUnit"] = undefined;
-    } else if (type == "variable") {
-      l["type"] = "Variable";
-      l["class"] = list[i].getElementsByTagName("type")[0].textContent;
-      l["path"] =
-        path +
-        (path == "/vendor" ? "/" : seperator) +
-        encodeURI(l["identifier"]);
-      l["identifier"] =
-        list[i].getElementsByTagName("identifier")[0].textContent;
-      // (path == "/vendor" ? "" : seperator) + l["identifier"];
-      l["icon"] = "fa fa-file-text";
-      l["techUnit"] = list[i].getElementsByTagName("techunit")[0].textContent;
-    } else if (type == "link") {
-      var rel = list[i].getElementsByTagName("type")[0].textContent;
-      if (rel == "global-1-m") {
-        l["type"] = "Global Link 1:m";
-      } else if (rel == "global-m-1") {
-        l["type"] = "Global Link m:1";
-      } else if (rel == "global-1-1") {
-        l["type"] = "Global Link 1:1";
-      }
-      l["class"] = list[i].getElementsByTagName(
-        "associationIdentifier"
-      )[0].textContent;
-      l["path"] =
-        path +
-        (path == "/vendor" ? "/" : seperator) +
-        encodeURI(l["identifier"]);
-      l["identifier"] =
-        list[i].getElementsByTagName("identifier")[0].textContent,
-        // (path == "/vendor" ? "" : seperator) + l["identifier"];
-        l["icon"] = "fa fa-link";
-      l["techUnit"] = undefined;
-    } else {
-      l["type"] = "unknown";
-      l["class"] = "unknown";
-      l["path"] = path;
-    }
-
-    // Add to object cache
-    Application.objCache.addChild(
-      path,
-      list[i].getElementsByTagName("identifier")[0].textContent,
-      type,
-      l["access"],
-      l["class"],
-      l["semantics"],
-      list[i].getElementsByTagName("creationtime")[0].textContent,
-      l["techUnit"],
-      l["comment"]
-    );
-
-
-    var identButton = "<td class='variable-identifier'><button tabIndes='-1'>" + l["identifier"] + "</button></td>"
-    var value;
-    if (l["access"].includes('write')) {
-      $("#domain-view>table>tbody>tr:last-child").append(
-        value = '<td> <input id="' + l["path"] + '" name="' + l["identifier"] + '" class="varvalinp" type="text" value="" tabIndex="1" > </td>');
-    } else {
-      $("#domain-view>table>tbody>tr:last-child").append(
-        value = '<td> <p id="' + l["path"] + '" name="' + l["identifier"] + '" class="varval" type="text" value=""> </p> </td>')
-    };
-
-
-    var t = $('#view-table').DataTable();
-    t.row.add([
-      '<td><i class="' + l["icon"] + '"></i></td>',
-      identButton,
-      value,
-      l["type"],
-      l["class"],
-      l["access"],
-      Application.prototype.semanticsBitsToChars(l["semantics"]),
-      l["creation"],
-      l["comment"],
-      l["path"]
-    ]).draw(false);
-
-
-
-    // add data to table
-    //   $("#domain-view>table>tbody").append(
-    //     '<tr data-toggle="context" data-target="#context-menu-' +
-    //       type +
-    //       '" data-path="' +
-    //       l["path"] +
-    //       '" data-type="' +
-    //       type +
-    //       '"></tr>'
-    //   );
-
-    //   $("#domain-view>table>tbody>tr:last-child").append(
-    //     '<td><i class="' + l["icon"] + '"></i></td>'
-    //   );
-    //   var id = decodeURI(l["identifier"]);
-    //   if (id[0]=='.')
-    //     id = id.substring(1,)
-    //   $("#domain-view>table>tbody>tr:last-child").append(
-    //   "<td class='variable-identifier'><button tabIndes='-1'>" + id+ "</button></td>"
-    //   );
-    //   
-  }
-
-  // // register event listeners when clicking on row
-  // $("#domain-view>table>tbody>tr>td.variable-identifier")
-  //   .off("mousedown")
-  //   .mousedown(function(e) {
-  //     var rowtype = $(this.parentNode).attr("data-type");
-  //     var rowpath = $(this.parentNode).attr("data-path");
-  //     // left click
-  //     if (e.which == 1) {
-  //       if (rowtype == "variable") {
-  //         // open variable modal
-  //         $("#view-table").trigger("getVariable", rowpath);
-  //         // $("#view-table").trigger("updateVariable", rowpath);
-  //       } else {
-  //         Application.prototype.expandNodes(rowpath);
-  //       }
-  //       // right click
-  //     } else if (e.which == 3) {
-  //       $("#view-table").trigger("saveClickedPath", rowpath);
-  //     }
-  //   });
-
-  //   $(".varvalinp").keyup(function (event) {
-  //     if (event.keyCode == 13) {
-  //         $(this).trigger("setVariable", 
-  //         {
-  //           path: Application.history.getPath()+ event.currentTarget.name, 
-  //           newValue: event.currentTarget.value
-  //         });
-  //     }
-  //   });
-  //update looper
-}),
-
-/**!!!
- *
- *
- * @param path Variable path to open
- */
-(Application.prototype.updateVarValues = function (path) {
-  var paths = [];
-  var variables = [];
-  var children = Application.objCache.getChildren(path);
-  var seperator = (path == "/vendor") ? '/' : '.';
-  children.forEach(function (el, i) {
-    if (el.type == 'variable' || el.type == 'link') {
-      paths.push(path + seperator + el.name);
-      // Applicvariables.push(el.name);
-    }
-  });
-  this.serverConnection.getVar(paths, this.showVarValues, this.updateVarValuesFailure, children);
-}),
-
-/**!!!
- *
- *
- * @param path Variable path to open
- */
-(Application.prototype.updateVarValuesFailure = function (paths, textStatus, title, objstatus, objstatusText, results) {
-  for (var i = 0; i < paths.length; i++) {
-
-    path = paths[i];
-    var v = [];
-
-    if (results[i].tagName == "failure")
-      v["value"] = "ERROR: " + results[i].textContent
-    else
-      v["value"] = results[i].getElementsByTagName("value")[0].textContent
-
-    // $("#domain-view>table>tbody>tr>td>input").val(v["value"]);
-    var inp = document.getElementById(path);
-    if (inp == document.activeElement) {
-      continue;
-    }
-    if (inp == null || inp.tagName == 'INPUT')
-      $(inp).val(v["value"]);
-    else
-      inp.textContent = v["value"];
-  }
-
-}),
-
-/**
- *
- *
- * @param data  XML variables data from AJAX request to server
- * @param variables variables of object !!!(optional)
- */
-(Application.prototype.showVarValues = function (data, variables) {
-
-  var paths = data.getElementsByTagName("path")[0].textContent.split(',');
-  for (var i = 0; i < paths.length; i++) {
-
-    path = paths[i];
-    var v = [];
-
-    v["value"] = data
-      .getElementsByTagName("value")[i]
-      .textContent.replace(/\n+$/g, ""); // remove empty line at end
-
-    // $("#domain-view>table>tbody>tr>td>input").val(v["value"]);
-    var inp = document.getElementById(path);
-    if (inp == null || inp == document.activeElement) {
-      continue;
-    }
-    if (inp.tagName == 'INPUT')
-      $(inp).val(v["value"]);
-    else
-      inp.textContent = v["value"];
-  }
 }),
 
 /**
