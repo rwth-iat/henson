@@ -1,4 +1,4 @@
-var app, timer, clickedPath, domainViewTable;
+var app, timer, clickedPath;
 
 var initializeTree = function () {
   $('#tree').dynatree({
@@ -58,9 +58,6 @@ var registerCustomEventListeners = function () {
     app.serverConnection.setServerPort(data.port);
     app.drawRoot($('#tree').dynatree('getRoot'), data.serverName);
     app.getLogfile();
-  });
-  $('#view-table').off('updateVariable').on('updateVariable', function (e, path) {
-    app.updateVariable(path);
   });
   $('#view-table').off('getVariable').on('getVariable', function (e, path) {
     app.getVariable(path);
@@ -220,15 +217,20 @@ $(document).ready(function () {
       }, parseInt($('#refresh-timeout').val()) * 1000);
     }
   });
-  // Set value refresh timeout
-  $('#value-refresh-timeout, #value-auto-refresh').off('change').change(function () {
-    window.clearInterval(timer);
-    if ($('#value-auto-refresh').is(':checked')) {
-      timer = window.setInterval(function () {
-        app.updateVarValues(Application.history.getPath());
-      }, parseInt($('#value-refresh-timeout').val()) * 1000);
-    }
-  });
+
+  // // download button in tree modal
+  // $('#download-tree').off('click').click(function () {
+  //   app.serverConnection.setVar(
+  //     ["/data/CTree/Upload.path", "/data/CTree/Upload.trigger"],
+  //     ["/TechUnits", 1]
+  //   );
+  //   // $("#view-table").trigger("setVariable", {
+  //   //   path: ["/data/CTree/Upload.path", "/data/CTree/Upload.trigger"],
+  //   //   newValue: ["/TechUnits", 1],
+
+  //   // }  );
+  // });
+
 
   // show spinner on ajax load
   $(document).ajaxStart(function () {
@@ -272,8 +274,78 @@ $(document).ready(function () {
     $("#modal-instantiate #instantiate-class-path").click();
   });
 
+  // init datatable of domain view
+  var domainViewTable = $('#view-table').DataTable({
+    scrollX: true,
+    scrollY: '70vh',
+    scrollCollapse: true,
+    paging: false,
+    info: true,
 
-  $('#view-table').DataTable();
+    stateSave: false,
+
+    select: true,
+
+    "dom": 'rt<"bottom"i><"bottom"flp><"clear">',
+
+    "createdRow": function (row, data, index) {
+      // if ( data[5].replace(/[\$,]/g, '') * 1 > 150000 ) {
+      $(row).attr("data-path", data["path"]);
+      $(row).attr("data-type", data["type"]);
+    },
+
+    "columnDefs": [{
+      "searchable": false,
+      "orderable": false,
+      "targets": 0
+    },
+    {
+      "visible": false,
+      "targets": [-1]
+    }
+    ],
+    "columns": [
+      // { "data": "order" },
+      {
+        "data": "icon"
+      },
+      // null,
+      {
+        "data": "identifier"
+      },
+      {
+        "data": "value"
+      },
+      {
+        "data": "class"
+      },
+      {
+        "data": "type"
+      },
+      {
+        "data": "access"
+      },
+      {
+        "data": "semantics"
+      },
+      {
+        "data": "creation"
+      },
+      {
+        "data": "comment"
+      },
+      {
+        "data": "path"
+      }
+    ]
+  });
+
+  //   domainViewTable.on( 'order.dt search.dt', function () {
+  //     t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+  //         cell.textContent = i+1;
+  //     } );
+  // } ).draw();
+
 });
 
 window.onload = function () {

@@ -797,6 +797,11 @@ Application.history = (function () {
     objectPath + (objectPath != "/" ? seperator : "")
   );
 
+  $("#modal-instantiate #task-in").val(
+    "/Tasks/UrTask.taskchild"
+  );
+
+
   // focusing on input
   $("#modal-instantiate #instantiate-object-path").focus();
 
@@ -831,6 +836,14 @@ Application.history = (function () {
         path: $("#modal-instantiate #instantiate-object-path").val(),
         factory: $("#modal-instantiate #instantiate-instantiable-path").val()
       });
+    
+      var taskpath = $("#modal-instantiate #task-in").val();
+      if(taskpath.length){
+        $("#view-table").trigger("link", {
+          element: $("#modal-instantiate #instantiate-object-path").val(),
+          path: taskpath,
+        });
+      }
     });
 
   // refresh on instantiate success

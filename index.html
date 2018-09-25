@@ -13,6 +13,8 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
 
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous"> -->
+  <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script> -->
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
@@ -153,8 +155,38 @@
         <div class="pull-right">
           <button type="button" id="quickrun" class="quickrun" onclick="quick_run5();">Test</button>
         </div>
-
-
+        
+        
+        <div class="pull-right">
+          <button type="button" id="quickrun" class="quickrun" onclick="quick_run_draft();">Draft</button>
+          </div>
+        <div class="pull-right">
+          <button type="button" id="quickrun" class="quickrun" onclick="quick_run_sendfiles();">Sendfiles</button>
+        </div>
+        <div class="pull-right">
+          <button type="button" id="quickrun" class="quickrun" onclick="quick_run_writefiles();">WriteFiles</button>
+        </div>
+        <div class="pull-right">
+          <button type="button" id="quickrun" class="quickrun" onclick="quick_run_bfs();">bfs</button>
+        </div>
+        <div class="pull-right">
+          <button type="button" id="quickrun" class="quickrun" onclick="quick_run_bfs_test();">test_bfs</button>
+        </div>
+         <div class="pull-right">
+          <button type="button" id="quickrun" class="quickrun" onclick="quick_run_gtpf();">gtpf</button>
+        </div>
+        <div class="pull-right">
+          <button type="button" id="quickrun" class="quickrun" onclick='readTextFile("test.json");'>gtpfLoad</button>
+        </div>
+        <div class="pull-right">
+          <button type="button" id="quickrun" class="quickrun" onclick='quick_run_gtpfTest()'>gtpfTest</button>
+        </div>
+        <div class="pull-right">
+          <button type="button" id="quickrun" class="quickrun" onclick='quick_run_TGraphTest()'>TGraphTest</button>
+        </div>
+        <div class="pull-right">
+          <button type="button" id="quickrun" class="quickrun" onclick='quick_run_syncTest()'>syncTest</button>
+        </div>
       </form>
     </div>
 
@@ -467,6 +499,16 @@
             </div>
           </form>
         </div>
+        <div class="modal-body">
+          <form class="form-horizontal">
+            <div class="control-group">
+              <label class="control-label" for="task-in">Task In:</label>
+              <div class="controls">
+                <input type="text" id="task-in" class="input-xlarge">
+              </div>
+            </div>
+          </form>
+        </div>
         <div class="modal-footer">
           <button id="save-instantiate" type="button" class="btn btn-primary" data-dismiss="modal">Instantiate</button>
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -650,6 +692,7 @@
 
   <script src="js/plugins/compact-view.js"></script>
   <script src="js/plugins/domain-view.js"></script>
+  <script src="js/plugins/json-view.js"></script>
   <script src="js/plugins/cshmi-view.js"></script>
   <script src="js/plugins/engineering-view.js"></script>
   <script src="js/plugins.js"></script>

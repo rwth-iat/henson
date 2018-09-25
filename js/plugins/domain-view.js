@@ -47,6 +47,17 @@ var domainViewPlugIn = new function () {
         appendRows(data.getElementsByTagName('DomainEngProps'), path, 'domain');
         $('#container').css('display', 'block');
         t.columns.adjust().draw();
+        
+        /*input change value*/
+        $(".varvalinp").keyup(function (event) {
+            if (event.keyCode == 13) {
+                $(this).trigger("setVariable", {
+                    path: event.currentTarget.id,
+                    newValue: event.currentTarget.value
+                });
+
+            }
+        });
     };
 
     /**
@@ -214,15 +225,7 @@ var domainViewPlugIn = new function () {
         //     alert( 'You clicked on '+data[0]+'\'s row' );
 
         // });
-        $(".varvalinp").keyup(function (event) {
-            if (event.keyCode == 13) {
-                $(this).trigger("setVariable", {
-                    path: event.currentTarget.id,
-                    newValue: event.currentTarget.value
-                });
-
-            }
-        });
+        
         //update looper
     };
 
