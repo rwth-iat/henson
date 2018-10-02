@@ -57,20 +57,168 @@ function quick_run1(){
     //setting active to 1
     // app.setVariable(path+".root", "/TechUnits");
     // app.setVariable(path+".Submit", "TRUE");
-    
+    app.setVariable(objpath+".path", "/TechUnits/draft") 
     app.setVariable(objpath+".getvar", "TRUE");
-    app.setVariable(objpath+".targetKS", "localhost:MANAGER");
+    app.setVariable(objpath+".targetKS", "localhost/loadlibs");
     //setting active to 1
     app.setVariable(objpath+".actimode", 1);
-
+    
     app.refreshNode($('#tree').dynatree('getActiveNode'));
   }
   
   
-function quick_run4(){
+  function quick_run4(){
+    // creating
+    var objpath = "/TechUnits/loadlibs";
+    var factory = "/acplt/CTree/LoadLibs";
+    app.createObject(objpath, factory);
+    
+    //hanging in urtasks
+    var urtask = "/Tasks/UrTask";
+    app.link(objpath+".taskparent", urtask);
+    
+    //setting active to 1
+    // app.setVariable(path+".root", "/TechUnits");
+    // app.setVariable(path+".Submit", "TRUE");
+    app.setVariable(objpath+".targetKS", "localhost/loadlibs")
+    app.setVariable(objpath+".libsToSend", "{A}%20{B}%20{C}%20{eks}");
+    
+    //setting active to 1
+    app.setVariable(objpath+".actimode", 1);
+    
+    app.refreshNode($('#tree').dynatree('getActiveNode'));
+  }
+  
+  
+  function quick_run5(){
+    // creating
+    var objpath = "/TechUnits/test";
+    var factory = "/acplt/CTree/test";
+    app.createObject(objpath, factory);
+    
+    //hanging in urtasks
+    //   var urtask = "/Tasks/UrTask";
+    //   app.link(path+".taskparent", urtask);
+    
+    //setting active to 1
+    // app.setVariable(path+".root", "/TechUnits");
+    // app.setVariable(path+".Submit", "TRUE");
+    
+    //setting active to 1
+    app.setVariable(objpath+".actimode", 1);
+    
+    app.refreshNode($('#tree').dynatree('getActiveNode'));
+  }
+  function quick_run_draft(){
+    // creating
+    var objpath = "/TechUnits/draft";
+    var factory = "/acplt/draft/test";
+    app.createObject(objpath, factory);
+    
+    //hanging in urtasks
+    var urtask = "/Tasks/UrTask";
+    app.link(objpath+".taskparent", urtask);
+    
+    //setting active to 1
+    // app.setVariable(path+".root", "/TechUnits");
+    // app.setVariable(path+".Submit", "TRUE");
+    
+    //setting active to 1
+    app.setVariable(objpath+".actimode", 1);
+    
+    app.refreshNode($('#tree').dynatree('getActiveNode'));
+  }
+  function quick_run_sendfiles(){
+    // creating
+    var objpath = "/TechUnits/sendfiles";
+    var factory = "/acplt/CTree/SendFiles";
+    app.createObject(objpath, factory);
+    
+    //hanging in urtasks
+    var urtask = "/Tasks/UrTask";
+    app.link(objpath+".taskparent", urtask);
+    
+    //setting active to 1
+    app.setVariable(objpath+".targetKS", "localhost/loadlibs");
+    app.setVariable(objpath+".filesToSend", "{$ACPLT_HOME/system/addonlibs/A.png}%20{$ACPLT_HOME/system/addonlibs/B.png}%20{$ACPLT_HOME/system/addonlibs/C.png}");
+    
+    //setting active to 1
+    // app.setVariable(objpath+".actimode", 1);
+    
+    app.refreshNode($('#tree').dynatree('getActiveNode'));
+  }
+  function quick_run_draft(){
+    // creating
+    var objpath = "/TechUnits/draft";
+    var factory = "/acplt/draft/test";
+    app.createObject(objpath, factory);
+    
+    //hanging in urtasks
+    var urtask = "/Tasks/UrTask";
+    app.link(objpath+".taskparent", urtask);
+    
+    //setting active to 1
+    app.setVariable(path+".targetKS", "localhost/MANAGER");
+    // app.setVariable(path+".Submit", "TRUE");
+    
+    //setting active to 1
+    app.setVariable(objpath+".actimode", 1);
+    
+    app.refreshNode($('#tree').dynatree('getActiveNode'));
+  }
+  
+  
+  function quick_run_bfs(){
+    app.createObject("/acplt/malloc","/acplt/ov/domain");
+    app.createObject("/acplt/graphSearch","/acplt/ov/library");
+    
+    // creating
+    var objpath = "/TechUnits/bfs";
+    var factory = "/acplt/graphSearch/bfs";
+    app.createObject(objpath, factory);
+    
+    //hanging in urtasks
+    // var urtask = "/Tasks/UrTask";
+    // app.link(objpath+".taskparent", urtask);
+    
+    //setting active to 1
+    app.setVariable(objpath+".start", "PE004");
+    app.setVariable(objpath+".topologie", "/TechUnits/Topology");
+    app.setVariable(objpath+".recipe", "{PE009 Heat}%20{PE009 Heat}%20{PE025 Turn}%20{PE025 Turn}");
+    
+    //setting active to 1
+    // app.setVariable(objpath+".actimode", 1);
+    
+    app.refreshNode($('#tree').dynatree('getActiveNode'));
+  }
+  
+  function quick_run_bfs_test(){
+    app.createObject("/acplt/malloc","/acplt/ov/domain");
+    app.createObject("/acplt/graphSearch","/acplt/ov/library");
+    
+    // creating
+    var objpath = "/TechUnits/testBfs";
+    var factory = "/acplt/graphSearch/testBfs";
+    app.createObject(objpath, factory);
+    
+    //hanging in urtasks
+    var urtask = "/Tasks/UrTask";
+    app.link(objpath+".taskparent", urtask);
+    
+    //setting active to 1
+    // app.setVariable(objpath+".start", "PE004");
+    // app.setVariable(objpath+".topologie", "/TechUnits/Topology");
+    // app.setVariable(objpath+".recipe", "{PE009 Heat}%20{PE025 Turn}%20{PE033}");
+    
+    //setting active to x
+    app.setVariable(objpath+".actimode", 3);
+  
+  app.refreshNode($('#tree').dynatree('getActiveNode'));
+}
+function quick_run_draft(){
   // creating
-  var objpath = "/TechUnits/loadlibs";
-  var factory = "/acplt/CTree/LoadLibs";
+  var objpath = "/TechUnits/draft";
+  var factory = "/acplt/draft/test";
   app.createObject(objpath, factory);
   
   //hanging in urtasks
@@ -78,7 +226,7 @@ function quick_run4(){
   app.link(objpath+".taskparent", urtask);
   
   //setting active to 1
-  // app.setVariable(path+".root", "/TechUnits");
+  app.setVariable(path+".targetKS", "localhost/MANAGER");
   // app.setVariable(path+".Submit", "TRUE");
   
   //setting active to 1
@@ -87,23 +235,115 @@ function quick_run4(){
   app.refreshNode($('#tree').dynatree('getActiveNode'));
 }
 
-
-function quick_run5(){
+function quick_run_gtpf(){
   // creating
-  var objpath = "/TechUnits/test";
-  var factory = "/acplt/CTree/test";
+  var objpath = "/TechUnits/gtpf";
+  var factory = "/acplt/gtpf/assozierer";
+  app.createObject(objpath, factory);
+
+
+  app.setVariable(objpath+".Path", "/TechUnits/WandelbareTopologie");
+  
+  //hanging in urtasks
+  var urtask = "/Tasks/UrTask";
+  app.link(objpath+".taskparent", urtask);
+  
+  //setting active to 1
+  // app.setVariable(path+".targetKS", "localhost/MANAGER");
+  // app.setVariable(path+".Submit", "TRUE");
+  
+  //setting active to 1
+  app.setVariable(objpath+".actimode", 3);
+  
+  app.refreshNode($('#tree').dynatree('getActiveNode'));
+}
+
+function quick_run_gtpfTest(){
+  app.createObject("/acplt/malloc","/acplt/ov/domain");
+  app.createObject("/acplt/TGraph","/acplt/ov/library");
+  app.createObject("/acplt/ovunity","/acplt/ov/library");
+  app.createObject("/acplt/gtpf","/acplt/ov/library");
+  app.createObject("/acplt/gtpfTest","/acplt/ov/library");
+  // creating
+  var objpath = "/TechUnits/gtpfTest";
+  var factory = "/acplt/gtpfTest/dijkstraTest";
   app.createObject(objpath, factory);
   
   //hanging in urtasks
-  //   var urtask = "/Tasks/UrTask";
-  //   app.link(path+".taskparent", urtask);
+  var urtask = "/Tasks/UrTask";
+  app.link(objpath+".taskparent", urtask);
   
   //setting active to 1
-  // app.setVariable(path+".root", "/TechUnits");
+  // app.setVariable(path+".targetKS", "localhost/MANAGER");
   // app.setVariable(path+".Submit", "TRUE");
   
   //setting active to 1
-  app.setVariable(objpath+".actimode", 1);
+  app.setVariable(objpath+".actimode", 3);
   
   app.refreshNode($('#tree').dynatree('getActiveNode'));
 }
+
+function quick_run_TGraphTest(){
+  app.createObject("/acplt/malloc","/acplt/ov/domain");
+  app.createObject("/acplt/ovunity","/acplt/ov/library");
+  app.createObject("/acplt/TGraph","/acplt/ov/library");
+  app.createObject("/acplt/TGraphTest","/acplt/ov/library");
+  // creatin
+  var objpath = "/TechUnits/TGraphTest";
+  var factory = "/acplt/TGraphTest/dijkstraTest";
+  app.createObject(objpath, factory);
+  
+  //hanging in urtasks
+  var urtask = "/Tasks/UrTask";
+  app.link(objpath+".taskparent", urtask);
+  
+  //setting active to 1
+  // app.setVariable(path+".targetKS", "localhost/MANAGER");
+  // app.setVariable(path+".Submit", "TRUE");
+  
+  //setting active to 1
+  app.setVariable(objpath+".actimode", 3);
+  
+  app.refreshNode($('#tree').dynatree('getActiveNode'));
+}
+
+function quick_run_syncTest(){
+  app.createObject("/acplt/malloc","/acplt/ov/domain");
+  app.createObject("/acplt/syncTest","/acplt/ov/library");
+  // creating
+  var objpath = "/TechUnits/syncTest";
+  var factory = "/acplt/syncTest/sscSyncTest";
+  app.createObject(objpath, factory);
+  
+  //hanging in urtasks
+  var urtask = "/Tasks/UrTask";
+  app.link(objpath+".taskparent", urtask);
+  
+  //setting active to 1
+  // app.setVariable(path+".targetKS", "localhost/MANAGER");
+  // app.setVariable(path+".Submit", "TRUE");
+  
+  //setting active to 1
+  app.setVariable(objpath+".actimode", 3);
+  
+  app.refreshNode($('#tree').dynatree('getActiveNode'));
+}
+
+function readTextFile(file)
+{
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, true);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                var allText = rawFile.responseText;
+                alert(allText);
+            }
+        }
+    }
+    rawFile.send(null);
+}
+
