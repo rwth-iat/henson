@@ -724,7 +724,7 @@ Application.prototype.drawVariable = function(data) {
       {
         path: $('#modal-variable #variable-resource-locator').val(),
         newValue: $('#modal-variable #variable-value').val(),
-        newVartype: 'KS_VT_'+$('#modal-variable #variable-data-type').val().toUpperCase().replace('VEC', '_VEC')
+        newVartype: 'KS_VT_'+$('#modal-variable #variable-data-type').val().toUpperCase().replace('VEC', '_VEC').replace("TIMESPAN", "TIME_SPAN")
       }
     );
   });
