@@ -1,4 +1,18 @@
 function CompactView() {
+
+  this.name = 'compact-view'; // internal name for plugin, also creates a DOM element with ID
+  this.title= 'Compact View'; // title of the tab
+  this.author= 'Zolboo Erdenebayar'; // your name here
+  this.activate= {
+    always: true
+  }; // activate condition, implemented: {exactClass: 'partial/path/of/class'}, {baseClass: 'partial/name/of/baseclass' or {always: true}
+  this.foreground= false; // switch plugin to foreground on activation?
+  this.refresh= true; // reload data on refresh?
+  this.destroy= false; // should the plugin be destroyed if the activation condition does not match anymore?
+
+  this.checkConditions = function () { // startup function that checks conditions before running the plugin
+      return true;
+  };
 }
 var compactViewPlugIn = new CompactView
 

@@ -247,6 +247,14 @@ shortcut.add("Ctrl+g", function () {
 	document.querySelector('.varvalinp').focus();
 });
 
+shortcut.add("Ctrl+Shift+a", function () {
+	document.querySelector('input[name="actimode"]').focus();
+});
+
+shortcut.add("Ctrl+Shift+e", function () {
+	document.querySelector('input[name="iexreq"]').focus();
+});
+
 shortcut.add("Ctrl+e", function () {
 	// document.querySelector('.dynatree-container').focus();
 	$("#tree").dynatree("getActiveNode").focus();
