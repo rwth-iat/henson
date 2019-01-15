@@ -752,6 +752,7 @@ Application.history = (function () {
           .val()
           .toUpperCase()
           .replace("VEC", "_VEC")
+          .replace("TIMESPAN", "TIME_SPAN")
       });
     });
 }),
